@@ -39,7 +39,7 @@ export default function RegisterForm() {
     };
 
     return (
-        <form onSubmit={handleSubmit} style={styles.form}>
+        <form onSubmit={handleSubmit}>
             <h2>🎉 Реєстрація</h2>
 
             <input
