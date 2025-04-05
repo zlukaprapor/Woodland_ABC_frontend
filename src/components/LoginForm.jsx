@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { registerUser } from "../api/auth";
+import { loginUser } from "../api/auth"; // Використовуємо метод для логіну
 
-export default function RegisterForm() {
+export default function LoginForm() {
     const [formData, setFormData] = useState({
-        username: "",
         email: "",
         password: "",
     });
@@ -22,14 +21,18 @@ export default function RegisterForm() {
         setSuccess(null);
 
         try {
-            const res = await registerUser(formData);
-            setSuccess(res.message);
+            // Використовуємо функцію loginUser для логіну
+            const res = await loginUser(formData);
+            setSuccess("Вхід успішний! Токен отримано.");
+            // Зберігаємо токен у LocalStorage або стані
+            localStorage.setItem("access_token", res.access_token);
+            console.log("Токен: ", res.access_token); // Можна використовувати токен для подальших запитів
         } catch (err) {
             if (err.response?.data?.detail) {
                 const detail = err.response.data.detail;
                 setError(Array.isArray(detail) ? detail.map(d => d.msg).join(", ") : detail);
             } else {
-                setError("Помилка при реєстрації");
+                setError("Невірний email або пароль.");
             }
         }
     };
@@ -40,7 +43,7 @@ export default function RegisterForm() {
 
     return (
         <form onSubmit={handleSubmit}>
-            <h2>🎉 Вхід</h2>
+            <h2>Логін</h2>
 
             <input
                 name="email"
@@ -70,7 +73,7 @@ export default function RegisterForm() {
                 </button>
             </div>
 
-            <button type="submit" style={styles.button}>До пригод</button>
+            <button type="submit" style={styles.button}>Увійти</button>
 
             {error && <p style={styles.error}>🚫 {error}</p>}
             {success && <p style={styles.success}>✅ {success}</p>}
