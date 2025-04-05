@@ -1,7 +1,7 @@
-import RegisterForm from "../components/RegisterForm";
+import LoginForm from "../components/LoginForm";
 import { registerUser } from "../api/auth";
 
-export default function RegisterPage() {
+export default function LoginPage() {
     const handleAuth = async (formData) => {
         return await registerUser(formData);
     };
@@ -9,7 +9,7 @@ export default function RegisterPage() {
     return (
         <div style={styles.container}>
             <div style={styles.card}>
-                <RegisterForm isLogin={false} handleAuth={handleAuth} />
+                <LoginForm isLogin={true} handleAuth={handleAuth} />
             </div>
         </div>
     );
