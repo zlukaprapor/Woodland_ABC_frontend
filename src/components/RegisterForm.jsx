@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { registerUser } from "../api/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterForm() {
     const [formData, setFormData] = useState({
@@ -10,7 +11,9 @@ export default function RegisterForm() {
 
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
-    const [showPassword, setShowPassword] = useState(false); // Додано стан для контролю видимості пароля
+    const [showPassword, setShowPassword] = useState(false);
+
+    const navigate = useNavigate(); // Хук для редіректу
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,7 +26,12 @@ export default function RegisterForm() {
 
         try {
             const res = await registerUser(formData);
-            setSuccess(res.message);
+            setSuccess(res.message || "Реєстрація успішна!");
+
+            // Затримка перед редіректом (1 секунда)
+            setTimeout(() => {
+                navigate("/"); // редірект на стартову сторінку
+            }, 1000);
         } catch (err) {
             if (err.response?.data?.detail) {
                 const detail = err.response.data.detail;
@@ -35,11 +43,11 @@ export default function RegisterForm() {
     };
 
     const togglePasswordVisibility = () => {
-        setShowPassword(prevState => !prevState); // Перемикаємо видимість пароля
+        setShowPassword(prev => !prev);
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={styles.form}>
             <h2>🎉 Реєстрація</h2>
 
             <input
@@ -62,7 +70,7 @@ export default function RegisterForm() {
             <div style={styles.inputGroup}>
                 <input
                     name="password"
-                    type={showPassword ? "text" : "password"} // Змінюємо тип поля в залежності від стану
+                    type={showPassword ? "text" : "password"}
                     placeholder="Пароль"
                     value={formData.password}
                     onChange={handleChange}

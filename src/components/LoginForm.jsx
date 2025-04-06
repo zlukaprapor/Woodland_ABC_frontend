@@ -1,15 +1,14 @@
 import { useState } from "react";
-import { loginUser } from "../api/auth"; // Використовуємо метод для логіну
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "../api/auth";
 
 export default function LoginForm() {
-    const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-    });
-
+    const [formData, setFormData] = useState({ email: "", password: "" });
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
-    const [showPassword, setShowPassword] = useState(false); // Додано стан для контролю видимості пароля
+    const [showPassword, setShowPassword] = useState(false);
+
+    const navigate = useNavigate(); // ✅ навігатор для редіректу
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,25 +20,20 @@ export default function LoginForm() {
         setSuccess(null);
 
         try {
-            // Використовуємо функцію loginUser для логіну
             const res = await loginUser(formData);
-            setSuccess("Вхід успішний! Токен отримано.");
-            // Зберігаємо токен у LocalStorage або стані
             localStorage.setItem("access_token", res.access_token);
-            console.log("Токен: ", res.access_token); // Можна використовувати токен для подальших запитів
+            setSuccess("Вхід успішний!");
+            // ⏳ Затримка перед редіректом (необов'язково)
+            setTimeout(() => {
+                navigate("/dashboard"); // 🔁 редірект після входу
+            }, 1000);
         } catch (err) {
-            if (err.response?.data?.detail) {
-                const detail = err.response.data.detail;
-                setError(Array.isArray(detail) ? detail.map(d => d.msg).join(", ") : detail);
-            } else {
-                setError("Невірний email або пароль.");
-            }
+            const detail = err.response?.data?.detail;
+            setError(Array.isArray(detail) ? detail.map(d => d.msg).join(", ") : detail || "Невірний email або пароль.");
         }
     };
 
-    const togglePasswordVisibility = () => {
-        setShowPassword(prevState => !prevState); // Перемикаємо видимість пароля
-    };
+    const togglePasswordVisibility = () => setShowPassword(prev => !prev);
 
     return (
         <form onSubmit={handleSubmit}>
@@ -57,7 +51,7 @@ export default function LoginForm() {
             <div style={styles.inputGroup}>
                 <input
                     name="password"
-                    type={showPassword ? "text" : "password"} // Змінюємо тип поля в залежності від стану
+                    type={showPassword ? "text" : "password"}
                     placeholder="Пароль"
                     value={formData.password}
                     onChange={handleChange}
@@ -82,15 +76,6 @@ export default function LoginForm() {
 }
 
 const styles = {
-    form: {
-        maxWidth: "300px",
-        margin: "2rem auto",
-        padding: "1rem",
-        background: "#fff7e6",
-        borderRadius: "1rem",
-        boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-        fontFamily: "Comic Sans MS, cursive",
-    },
     input: {
         width: "100%",
         padding: "0.5rem",
