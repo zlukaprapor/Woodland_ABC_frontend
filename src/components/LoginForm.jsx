@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth";
+import { saveAuthData } from "../services/authService";
 
 export default function LoginForm() {
     const [formData, setFormData] = useState({ email: "", password: "" });
@@ -21,17 +22,27 @@ export default function LoginForm() {
 
         try {
             const res = await loginUser(formData);
-            localStorage.setItem("access_token", res.access_token);
+            const { access_token, user } = res;
+
+            // зберігаємо токен + дані користувача в localStorage
+            saveAuthData(access_token, user);
+
             setSuccess("Вхід успішний!");
-            // ⏳ Затримка перед редіректом (необов'язково)
+
+            // редірект залежно від ролі
             setTimeout(() => {
-                navigate("/dashboard"); // 🔁 редірект після входу
+                if (user.role === "admin") {
+                    navigate("/admin", { replace: true });
+                } else {
+                    navigate("/dashboard", { replace: true });
+                }
             }, 1000);
         } catch (err) {
             const detail = err.response?.data?.detail;
             setError(Array.isArray(detail) ? detail.map(d => d.msg).join(", ") : detail || "Невірний email або пароль.");
         }
     };
+
 
     const togglePasswordVisibility = () => setShowPassword(prev => !prev);
 

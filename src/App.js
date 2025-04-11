@@ -2,8 +2,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
-import Dashboard from "./pages/Dashboard"; // твоя захищена сторінка
+import UserDashboard from "./pages/UserDashboard"; // твоя захищена сторінка
 import PrivateRoute from "./components/PrivateRoute";
+import AdminDashboard from "./pages/AdminDashboard";
 
 function App() {
     return (
@@ -16,10 +17,20 @@ function App() {
                     path="/dashboard"
                     element={
                         <PrivateRoute>
-                            <Dashboard />
+                            <UserDashboard />
                         </PrivateRoute>
                     }
                 />
+                {/* Захищена сторінка для адміна */}
+                <Route
+                    path="/admin"
+                    element={
+                        <PrivateRoute requiredRole="admin">
+                            <AdminDashboard />
+                        </PrivateRoute>
+                    }
+                />
+
             </Routes>
         </BrowserRouter>
     );

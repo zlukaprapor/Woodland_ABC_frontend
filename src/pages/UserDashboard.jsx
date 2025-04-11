@@ -1,4 +1,4 @@
-export default function Dashboard() {
+export default function UserDashboard() {
     return (
         <div style={{ textAlign: "center", marginTop: "2rem" }}>
             <h1>👋 Привіт, ти залогінений!</h1>
