@@ -1,5 +1,5 @@
 import RegisterForm from "../components/RegisterForm";
-import { registerUser } from "../api/auth";
+import { registerUser } from "../api/auth.jsx";
 
 export default function RegisterPage() {
     const handleAuth = async (formData) => {

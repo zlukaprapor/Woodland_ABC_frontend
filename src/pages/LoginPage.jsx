@@ -1,5 +1,5 @@
 import LoginForm from "../components/LoginForm";
-import { registerUser } from "../api/auth";
+import { registerUser } from "../api/auth.jsx";
 
 export default function LoginPage() {
     const handleAuth = async (formData) => {
