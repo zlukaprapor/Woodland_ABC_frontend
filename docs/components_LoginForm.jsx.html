@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/LoginForm.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/LoginForm.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { loginUser } from "../api/auth.jsx";
+import { saveAuthData } from "../services/authService";
+
+/**
+ * Компонент форми логіну користувача.
+ *
+ * Реалізує:
+ * - введення email та паролю
+ * - надсилання даних для авторизації
+ * - збереження токена і даних користувача
+ * - редірект залежно від ролі користувача
+ *
+ * @component
+ * @returns {JSX.Element} React-компонент форми входу
+ */
+export default function LoginForm() {
+    const [formData, setFormData] = useState({ email: "", password: "" });
+    const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
+    const [showPassword, setShowPassword] = useState(false);
+
+    const navigate = useNavigate(); // ✅ навігатор для редіректу
+
+    /**
+     * Оновлює стан форми при зміні значень інпутів
+     * @param {React.ChangeEvent&lt;HTMLInputElement>} e - Подія зміни інпута
+     */
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    /**
+     * Обробляє надсилання форми входу:
+     * - викликає API для логіну
+     * - зберігає токен та користувача
+     * - редіректить на відповідну сторінку
+     *
+     * @param {React.FormEvent&lt;HTMLFormElement>} e - Подія submit форми
+     * @returns {Promise&lt;void>}
+     */
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError(null);
+        setSuccess(null);
+
+        try {
+            const res = await loginUser(formData);
+            const { access_token, user } = res;
+
+            // зберігаємо токен + дані користувача в localStorage
+            saveAuthData(access_token, user);
+
+            setSuccess("Вхід успішний!");
+
+            // редірект залежно від ролі
+            setTimeout(() => {
+                if (user.role === "admin") {
+                    navigate("/admin", { replace: true });
+                } else {
+                    navigate("/dashboard", { replace: true });
+                }
+            }, 1000);
+        } catch (err) {
+            const detail = err.response?.data?.detail;
+            setError(Array.isArray(detail) ? detail.map(d => d.msg).join(", ") : detail || "Невірний email або пароль.");
+        }
+    };
+
+    /**
+     * Перемикає видимість пароля
+     */
+    const togglePasswordVisibility = () => setShowPassword(prev => !prev);
+
+    return (
+        &lt;form onSubmit={handleSubmit}>
+            &lt;h2>Логін&lt;/h2>
+
+            &lt;input
+                name="email"
+                type="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
+                style={styles.input}
+                required
+            />
+            &lt;div style={styles.inputGroup}>
+                &lt;input
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Пароль"
+                    value={formData.password}
+                    onChange={handleChange}
+                    style={styles.input}
+                    required
+                />
+                &lt;button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    style={styles.toggleButton}
+                >
+                    {showPassword ? "Сховати" : "Показати"} пароль
+                &lt;/button>
+            &lt;/div>
+
+            &lt;button type="submit" style={styles.button}>Увійти&lt;/button>
+
+            {error &amp;&amp; &lt;p style={styles.error}>🚫 {error}&lt;/p>}
+            {success &amp;&amp; &lt;p style={styles.success}>✅ {success}&lt;/p>}
+        &lt;/form>
+    );
+}
+
+const styles = {
+    input: {
+        width: "100%",
+        padding: "0.5rem",
+        margin: "0.5rem 0",
+        borderRadius: "0.5rem",
+        border: "1px solid #ccc",
+    },
+    inputGroup: {
+        position: "relative",
+    },
+    button: {
+        backgroundColor: "#ffa500",
+        color: "white",
+        padding: "0.5rem",
+        borderRadius: "0.5rem",
+        border: "none",
+        cursor: "pointer",
+        fontWeight: "bold",
+    },
+    toggleButton: {
+        position: "absolute",
+        right: "10px",
+        top: "50%",
+        transform: "translateY(-50%)",
+        background: "transparent",
+        border: "none",
+        color: "#ffa500",
+        cursor: "pointer",
+    },
+    error: {
+        color: "red",
+        marginTop: "1rem",
+    },
+    success: {
+        color: "green",
+        marginTop: "1rem",
+    },
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#loginUser">loginUser</a></li><li><a href="global.html#registerUser">registerUser</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Apr 14 2025 09:21:30 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
