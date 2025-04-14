@@ -3,6 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth.jsx";
 import { saveAuthData } from "../services/authService";
 
+/**
+ * Компонент форми логіну користувача.
+ *
+ * Реалізує:
+ * - введення email та паролю
+ * - надсилання даних для авторизації
+ * - збереження токена і даних користувача
+ * - редірект залежно від ролі користувача
+ *
+ * @component
+ * @returns {JSX.Element} React-компонент форми входу
+ */
 export default function LoginForm() {
     const [formData, setFormData] = useState({ email: "", password: "" });
     const [error, setError] = useState(null);
@@ -11,10 +23,23 @@ export default function LoginForm() {
 
     const navigate = useNavigate(); // ✅ навігатор для редіректу
 
+    /**
+     * Оновлює стан форми при зміні значень інпутів
+     * @param {React.ChangeEvent<HTMLInputElement>} e - Подія зміни інпута
+     */
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    /**
+     * Обробляє надсилання форми входу:
+     * - викликає API для логіну
+     * - зберігає токен та користувача
+     * - редіректить на відповідну сторінку
+     *
+     * @param {React.FormEvent<HTMLFormElement>} e - Подія submit форми
+     * @returns {Promise<void>}
+     */
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
@@ -43,7 +68,9 @@ export default function LoginForm() {
         }
     };
 
-
+    /**
+     * Перемикає видимість пароля
+     */
     const togglePasswordVisibility = () => setShowPassword(prev => !prev);
 
     return (

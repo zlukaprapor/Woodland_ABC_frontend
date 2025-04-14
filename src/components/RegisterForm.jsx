@@ -2,6 +2,27 @@ import { useState } from "react";
 import { registerUser } from "../api/auth.jsx";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Компонент форми реєстрації користувача.
+ *
+ * Реалізує:
+ * - введення імені користувача, email та паролю
+ * - валідацію форми на клієнті
+ * - відправку даних на сервер через `registerUser`
+ * - відображення повідомлень про помилки або успішну реєстрацію
+ * - редірект користувача на головну сторінку після успішної реєстрації
+ *
+ * Особливості:
+ * - приховування/відображення паролю
+ * - простий кастомний стиль
+ *
+ * Використовує:
+ * - `useState` для збереження стану форми та повідомлень
+ * - `useNavigate` з react-router-dom для редіректу
+ *
+ * @component
+ * @returns {JSX.Element} React-компонент форми реєстрації
+ */
 export default function RegisterForm() {
     const [formData, setFormData] = useState({
         username: "",
@@ -15,10 +36,23 @@ export default function RegisterForm() {
 
     const navigate = useNavigate(); // Хук для редіректу
 
+    /**
+     * Оновлює стан форми при зміні інпутів
+     * @param {React.ChangeEvent<HTMLInputElement>} e - Подія зміни інпута
+     */
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    /**
+     * Обробляє відправлення форми:
+     * - надсилає дані на сервер
+     * - обробляє відповіді/помилки
+     * - виконує редірект при успіху
+     *
+     * @param {React.FormEvent<HTMLFormElement>} e - Подія відправлення форми
+     * @returns {Promise<void>}
+     */
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
@@ -42,6 +76,9 @@ export default function RegisterForm() {
         }
     };
 
+    /**
+     * Перемикає видимість пароля
+     */
     const togglePasswordVisibility = () => {
         setShowPassword(prev => !prev);
     };
