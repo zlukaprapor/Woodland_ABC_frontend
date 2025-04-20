@@ -1,10 +1,14 @@
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
-import UserDashboard from "./pages/UserDashboard"; // твоя захищена сторінка
-import PrivateRoute from "./components/PrivateRoute";
+import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import PrivateRoute from "./components/PrivateRoute";
+import LessonsListPage from "./pages/admin/LessonsListPage";
+import CreateLessonPage from "./pages/admin/CreateLessonPage";
+import EditLessonPage from "./pages/admin/EditLessonPage";
 
 function App() {
     return (
@@ -21,7 +25,6 @@ function App() {
                         </PrivateRoute>
                     }
                 />
-                {/* Захищена сторінка для адміна */}
                 <Route
                     path="/admin"
                     element={
@@ -30,11 +33,34 @@ function App() {
                         </PrivateRoute>
                     }
                 />
-
+                {/* Додайте цей маршрут для списку уроків */}
+                <Route
+                    path="/admin/lessons"
+                    element={
+                        <PrivateRoute requiredRole="admin">
+                            <LessonsListPage />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/admin/lessons/create"
+                    element={
+                        <PrivateRoute requiredRole="admin">
+                            <CreateLessonPage />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/admin/lessons/edit/:lessonId"
+                    element={
+                        <PrivateRoute requiredRole="admin">
+                            <EditLessonPage />
+                        </PrivateRoute>
+                    }
+                />
             </Routes>
         </BrowserRouter>
     );
 }
 
 export default App;
-
