@@ -1,14 +1,8 @@
-export default function Button({ onClick, text, color = "#ffb74d" }) {
-    return (
-        <button onClick={onClick} style={{ ...styles.button, backgroundColor: color }}>
-            {text}
-        </button>
-    );
-}
+import React from "react";
 
-const styles = {
-    button: {
-        backgroundColor: "#ffb74d",
+export default function Button({ onClick, text, color = "#ffb74d", style, ...props }) {
+    const buttonStyle = {
+        backgroundColor: color,
         border: "none",
         borderRadius: "12px",
         padding: "12px 24px",
@@ -17,5 +11,12 @@ const styles = {
         fontSize: "1.1rem",
         cursor: "pointer",
         transition: "0.3s",
-    },
-};
+        ...style,
+    };
+
+    return (
+        <button onClick={onClick} style={buttonStyle} {...props}>
+            {text}
+        </button>
+    );
+}

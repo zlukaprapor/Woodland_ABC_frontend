@@ -1,10 +1,11 @@
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
-import UserDashboard from "./pages/UserDashboard"; // твоя захищена сторінка
-import PrivateRoute from "./components/PrivateRoute";
+import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
     return (
@@ -21,7 +22,6 @@ function App() {
                         </PrivateRoute>
                     }
                 />
-                {/* Захищена сторінка для адміна */}
                 <Route
                     path="/admin"
                     element={
@@ -30,7 +30,6 @@ function App() {
                         </PrivateRoute>
                     }
                 />
-
             </Routes>
         </BrowserRouter>
     );
