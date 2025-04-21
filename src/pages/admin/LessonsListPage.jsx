@@ -28,18 +28,18 @@ export default function LessonsListPage() {
                 letter_filter: filter || undefined
             };
 
-            const data = await getLessons(params);
+            const items = await getLessons(params);
 
             if (reset) {
-                setLessons(data.items || []);
+                setLessons(items);
             } else {
-                setLessons(prev => [...prev, ...(data.items || [])]);
+                setLessons(prev => [...prev, ...items]);
             }
 
             setPagination(prev => ({
                 ...prev,
                 skip: reset ? pagination.limit : prev.skip + prev.limit,
-                hasMore: (data.items || []).length === prev.limit
+                hasMore: items.length === prev.limit
             }));
         } catch (err) {
             setError("Не вдалося завантажити уроки");

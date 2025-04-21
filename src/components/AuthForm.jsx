@@ -14,6 +14,7 @@ export default function AuthForm({ isLogin = true }) {
     const [formData, setFormData] = useState(initialFormData);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -25,6 +26,7 @@ export default function AuthForm({ isLogin = true }) {
         e.preventDefault();
         setError(null);
         setSuccess(null);
+        setIsLoading(true);
 
         try {
             if (isLogin) {
@@ -32,18 +34,20 @@ export default function AuthForm({ isLogin = true }) {
                 const { access_token, user } = res;
 
                 saveAuthData(access_token, user);
-                setSuccess("Вхід успішний!");
+                setSuccess("Вхід успішний! 🎉");
 
+                // Перенаправлення відповідно до ролі
                 setTimeout(() => {
                     if (user.role === "admin") {
                         navigate("/admin", { replace: true });
                     } else {
+                        // Для звичайного користувача - перенаправлення на алфавіт
                         navigate("/dashboard", { replace: true });
                     }
                 }, 1000);
             } else {
                 const res = await registerUser(formData);
-                setSuccess(res.message || "Реєстрація успішна!");
+                setSuccess(res.message || "Реєстрація успішна! 🎉");
 
                 setTimeout(() => {
                     navigate("/login");
@@ -54,17 +58,25 @@ export default function AuthForm({ isLogin = true }) {
             setError(Array.isArray(detail)
                 ? detail.map(d => d.msg).join(", ")
                 : detail || (isLogin ? "Невірний email або пароль." : "Помилка при реєстрації"));
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
         <form onSubmit={handleSubmit} style={formStyles.form}>
-            <h2>{isLogin ? "Логін" : "🎉 Реєстрація"}</h2>
+            <h2 style={{
+                color: "#2E7D32",
+                marginBottom: "20px",
+                textAlign: "center"
+            }}>
+                {isLogin ? "🌲 Вхід до Лісової абетки" : "🎉 Реєстрація в Лісовій абетці"}
+            </h2>
 
             {!isLogin && (
                 <FormInput
                     name="username"
-                    placeholder="Ім'я"
+                    placeholder="Ваше ім'я"
                     value={formData.username || ""}
                     onChange={handleChange}
                     required
@@ -89,11 +101,69 @@ export default function AuthForm({ isLogin = true }) {
                 required
             />
 
-            <button type="submit" style={formStyles.button}>
-                {isLogin ? "Увійти" : "Зареєструватися"}
+            <button
+                type="submit"
+                style={{
+                    ...formStyles.button,
+                    backgroundColor: isLogin ? "#66BB6A" : "#4CAF50",
+                    opacity: isLoading ? 0.7 : 1,
+                    cursor: isLoading ? "wait" : "pointer"
+                }}
+                disabled={isLoading}
+            >
+                {isLoading
+                    ? (isLogin ? "Вхід..." : "Реєстрація...")
+                    : (isLogin ? "Увійти" : "Зареєструватися")}
             </button>
 
             <StatusMessage error={error} success={success} />
+
+            <div style={{
+                marginTop: "15px",
+                textAlign: "center",
+                fontSize: "14px"
+            }}>
+                {isLogin ? (
+                    <p>
+                        Немає облікового запису?{" "}
+                        <span
+                            onClick={() => navigate("/register")}
+                            style={{
+                                color: "#4CAF50",
+                                cursor: "pointer",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Зареєструватися
+                        </span>
+                    </p>
+                ) : (
+                    <p>
+                        Вже є обліковий запис?{" "}
+                        <span
+                            onClick={() => navigate("/login")}
+                            style={{
+                                color: "#4CAF50",
+                                cursor: "pointer",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Увійти
+                        </span>
+                    </p>
+                )}
+                <p style={{ marginTop: "10px" }}>
+                    <span
+                        onClick={() => navigate("/")}
+                        style={{
+                            color: "#888",
+                            cursor: "pointer",
+                        }}
+                    >
+                        ← На головну
+                    </span>
+                </p>
+            </div>
         </form>
     );
 }

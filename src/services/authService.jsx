@@ -16,3 +16,14 @@ export const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
 };
+// Отримання даних користувача
+export const getAuthUser = () => {
+    const userStr = localStorage.getItem('user');
+    return userStr ? JSON.parse(userStr) : null;
+};
+
+// Перевірка чи користувач має роль адміністратора
+export const isAdmin = () => {
+    const user = getAuthUser();
+    return user && user.role === 'admin';
+};

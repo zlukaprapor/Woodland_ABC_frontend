@@ -9,6 +9,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import LessonsListPage from "./pages/admin/LessonsListPage";
 import CreateLessonPage from "./pages/admin/CreateLessonPage";
 import EditLessonPage from "./pages/admin/EditLessonPage";
+import LessonPage from "./pages/LessonPage";
 
 function App() {
     return (
@@ -22,6 +23,14 @@ function App() {
                     element={
                         <PrivateRoute>
                             <UserDashboard />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/lesson/:lessonId"
+                    element={
+                        <PrivateRoute>
+                            <LessonPage />
                         </PrivateRoute>
                     }
                 />
