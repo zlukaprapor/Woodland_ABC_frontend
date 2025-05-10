@@ -153,7 +153,7 @@ export default function LessonPage() {
                         }}>
                             {/* Ліва колонка */}
                             <div style={{
-                                width: "40%",
+                                width: "60%",
                                 display: "flex",
                                 flexDirection: "column",
                                 gap: "20px",
@@ -275,6 +275,33 @@ export default function LessonPage() {
                                 )}
 
                                 {/* Додаткова інформація */}
+
+                                {lesson.training && (
+                                    <div style={{
+                                        backgroundColor: "rgba(241, 248, 233, 0.85)",
+                                        borderRadius: "15px",
+                                        padding: "15px",
+                                        border: "2px solid #AED581",
+                                        flexGrow: 1
+                                    }}>
+                                        <h3 style={{
+                                            color: "#33691E",
+                                            marginBottom: "10px",
+                                            fontSize: "18px",
+                                            textAlign: "center"
+                                        }}>
+
+                                            Вчимо звуки:
+                                        </h3>
+                                        <p style={{
+                                            color: "#33691E",
+                                            fontSize: "15px",
+                                            lineHeight: "1.4"
+                                        }}>
+                                            {lesson.training}
+                                        </p>
+                                    </div>
+                                )}
                                 {lesson.description && (
                                     <div style={{
                                         backgroundColor: "rgba(241, 248, 233, 0.85)",
@@ -289,7 +316,8 @@ export default function LessonPage() {
                                             fontSize: "18px",
                                             textAlign: "center"
                                         }}>
-                                            Цікаво знати:
+
+                                            Віршики:
                                         </h3>
                                         <p style={{
                                             color: "#33691E",
@@ -300,11 +328,38 @@ export default function LessonPage() {
                                         </p>
                                     </div>
                                 )}
+                                {lesson.regulations && (
+                                    <div style={{
+                                        backgroundColor: "rgba(241, 248, 233, 0.85)",
+                                        borderRadius: "15px",
+                                        padding: "15px",
+                                        border: "2px solid #AED581",
+                                        flexGrow: 1
+                                    }}>
+                                        <h3 style={{
+                                            color: "#33691E",
+                                            marginBottom: "10px",
+                                            fontSize: "18px",
+                                            textAlign: "center"
+                                        }}>
+
+                                            Правила:
+                                        </h3>
+                                        <p style={{
+                                            color: "#33691E",
+                                            fontSize: "15px",
+                                            lineHeight: "1.4"
+                                        }}>
+                                            {lesson.regulations}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
+
 
                             {/* Права колонка */}
                             <div style={{
-                                width: "60%",
+                                width: "40%",
                                 height: "100%",
                                 display: "flex",
                                 flexDirection: "column",
@@ -320,10 +375,10 @@ export default function LessonPage() {
                                     textAlign: "center",
                                     padding: "0 15px"
                                 }}>
-                                    Предмет на літеру {lesson.letter_upper}:
+                                    Предмети на літеру {lesson.letter_upper}:
                                 </h3>
 
-                                {lesson.object_image && (
+                                {lesson.object_image_first && (
                                     <div style={{
                                         flexGrow: 1,
                                         display: "flex",
@@ -344,7 +399,71 @@ export default function LessonPage() {
                                             boxShadow: "0 4px 10px rgba(0,0,0,0.1)"
                                         }}>
                                             <img
-                                                src={normalizePath(lesson.object_image)}
+                                                src={normalizePath(lesson.object_image_first)}
+                                                alt={`Предмет на літеру ${lesson.letter_upper}`}
+                                                style={{
+                                                    maxWidth: "100%",
+                                                    maxHeight: "100%",
+                                                    objectFit: "contain"
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                                {lesson.object_image_second&& (
+                                    <div style={{
+                                        flexGrow: 1,
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        padding: "15px",
+                                        overflow: "hidden"
+                                    }}>
+                                        <div style={{
+                                            width: "90%",
+                                            height: "90%",
+                                            backgroundColor: "white",
+                                            borderRadius: "12px",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            padding: "15px",
+                                            boxShadow: "0 4px 10px rgba(0,0,0,0.1)"
+                                        }}>
+                                            <img
+                                                src={normalizePath(lesson.object_image_second)}
+                                                alt={`Предмет на літеру ${lesson.letter_upper}`}
+                                                style={{
+                                                    maxWidth: "100%",
+                                                    maxHeight: "100%",
+                                                    objectFit: "contain"
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                                {lesson.object_image_third && (
+                                    <div style={{
+                                        flexGrow: 1,
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        padding: "15px",
+                                        overflow: "hidden"
+                                    }}>
+                                        <div style={{
+                                            width: "90%",
+                                            height: "90%",
+                                            backgroundColor: "white",
+                                            borderRadius: "12px",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            padding: "15px",
+                                            boxShadow: "0 4px 10px rgba(0,0,0,0.1)"
+                                        }}>
+                                            <img
+                                                src={normalizePath(lesson.object_image_third)}
                                                 alt={`Предмет на літеру ${lesson.letter_upper}`}
                                                 style={{
                                                     maxWidth: "100%",

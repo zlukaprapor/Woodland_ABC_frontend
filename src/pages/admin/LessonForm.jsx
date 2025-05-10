@@ -9,11 +9,15 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
         letter_upper: initialData.letter_upper || "",
         letter_lower: initialData.letter_lower || "",
         description: initialData.description || "",
+        training: initialData.training || "",
+        regulations: initialData.regulations || "",
     });
 
     const [files, setFiles] = useState({
         letter_image: null,
-        object_image: null,
+        object_image_first: null,
+        object_image_second: null,
+        object_image_third: null,
         audio_file: null,
     });
 
@@ -64,10 +68,14 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
                     letter_upper: "",
                     letter_lower: "",
                     description: "",
+                    training: "",
+                    regulations: "",
                 });
                 setFiles({
                     letter_image: null,
-                    object_image: null,
+                    object_image_first: null,
+                    object_image_second: null,
+                    object_image_third: null,
                     audio_file: null,
                 });
 
@@ -125,11 +133,35 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
             </div>
 
             <div>
-                <label>Опис:</label>
+                <label>Віршики:</label>
                 <textarea
                     name="description"
-                    placeholder="Опис уроку"
+                    placeholder="Невеликі рифмовані вірші"
                     value={formData.description}
+                    onChange={handleChange}
+                    style={{ ...formStyles.input, minHeight: "100px" }}
+                    required={!isEditing}
+                />
+            </div>
+
+            <div>
+                <label>Тренування:</label>
+                <textarea
+                    name="training"
+                    placeholder="Тренувальні склади"
+                    value={formData.training}
+                    onChange={handleChange}
+                    style={{ ...formStyles.input, minHeight: "100px" }}
+                    required={!isEditing}
+                />
+            </div>
+
+            <div>
+                <label>Правила уроку:</label>
+                <textarea
+                    name="regulations"
+                    placeholder="Правила проведення уроку"
+                    value={formData.regulations}
                     onChange={handleChange}
                     style={{ ...formStyles.input, minHeight: "100px" }}
                     required={!isEditing}
@@ -149,10 +181,34 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
             </div>
 
             <div>
-                <label>Зображення об'єкта:</label>
+                <label>Переше зображення об'єкта на літеру:</label>
                 <input
                     type="file"
-                    name="object_image"
+                    name="object_image_first"
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    style={{ marginBottom: "10px" }}
+                    required={!isEditing}
+                />
+            </div>
+
+            <div>
+                <label>Друге зображення об'єкта на літеру:</label>
+                <input
+                    type="file"
+                    name="object_image_second"
+                    onChange={handleFileChange}
+                    accept="image/*"
+                    style={{ marginBottom: "10px" }}
+                    required={!isEditing}
+                />
+            </div>
+
+            <div>
+                <label>Третє зображення об'єкта на літеру:</label>
+                <input
+                    type="file"
+                    name="object_image_third"
                     onChange={handleFileChange}
                     accept="image/*"
                     style={{ marginBottom: "10px" }}

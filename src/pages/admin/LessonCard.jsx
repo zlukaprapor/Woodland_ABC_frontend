@@ -39,6 +39,8 @@ export default function LessonCard({ lesson, onDelete }) {
             <div style={styles.content}>
                 <h3 style={styles.title}>Урок: "{lesson.letter_upper}"</h3>
                 <p style={styles.description}>{lesson.description}</p>
+                <p style={styles.training}>{lesson.training}</p>
+                <p style={styles.regulations}>{lesson.regulations}</p>
 
                 <div style={styles.mediaInfo}>
                     <div style={styles.mediaItem}>
@@ -55,11 +57,37 @@ export default function LessonCard({ lesson, onDelete }) {
                     </div>
 
                     <div style={styles.mediaItem}>
-                        <strong>Зображення об'єкта:</strong>
-                        {lesson.object_image ? (
+                        <strong>Переше зображення об'єкта на літеру::</strong>
+                        {lesson.object_image_first ? (
                             <div style={styles.mediaPreview}>
                                 <img
-                                    src={normalizePath(lesson.object_image)}
+                                    src={normalizePath(lesson.object_image_first)}
+                                    alt={`Об'єкт на літеру ${lesson.letter_upper}`}
+                                    style={styles.thumbnail}
+                                />
+                            </div>
+                        ) : "Немає"}
+                    </div>
+
+                    <div style={styles.mediaItem}>
+                        <strong>Друге зображення об'єкта на літеру:</strong>
+                        {lesson.object_image_second ? (
+                            <div style={styles.mediaPreview}>
+                                <img
+                                    src={normalizePath(lesson.object_image_second)}
+                                    alt={`Об'єкт на літеру ${lesson.letter_upper}`}
+                                    style={styles.thumbnail}
+                                />
+                            </div>
+                        ) : "Немає"}
+                    </div>
+
+                    <div style={styles.mediaItem}>
+                        <strong>Третє зображення об'єкта на літеру:</strong>
+                        {lesson.object_image_third ? (
+                            <div style={styles.mediaPreview}>
+                                <img
+                                    src={normalizePath(lesson.object_image_third)}
                                     alt={`Об'єкт на літеру ${lesson.letter_upper}`}
                                     style={styles.thumbnail}
                                 />
