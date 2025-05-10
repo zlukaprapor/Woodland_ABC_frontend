@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getLessonById } from "../api/lessons";
 import Button from "../components/Button";
-import { pageStyles } from "../styles/commonStyles";
+// import { pageStyles } from "../styles/commonStyles";
 
 export default function LessonPage() {
     const { lessonId } = useParams();
