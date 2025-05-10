@@ -77,7 +77,7 @@ export default function UserDashboard() {
                 ...pageStyles.card,
                 width: "90%",
                 maxWidth: "800px",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "rgba(255, 255, 255, 0.85)", // Напівпрозорий фон
                 borderRadius: "20px",
                 padding: "30px",
                 boxShadow: "0 10px 20px rgba(0,0,0,0.1)"
@@ -134,14 +134,14 @@ export default function UserDashboard() {
                                         <div
                                             key={letter.id}
                                             style={{
-                                                width: "80px",
-                                                height: "80px",
+                                                width: "150px",
+                                                height: "150px",
                                                 borderRadius: "12px",
                                                 backgroundColor: bgColor,
                                                 display: "flex",
                                                 justifyContent: "center",
                                                 alignItems: "center",
-                                                fontSize: "36px",
+                                                fontSize: "86px",
                                                 fontWeight: "bold",
                                                 cursor: "pointer",
                                                 boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
@@ -166,7 +166,7 @@ export default function UserDashboard() {
                                                 position: "absolute",
                                                 bottom: "3px",
                                                 right: "3px",
-                                                fontSize: "14px",
+                                                fontSize: "34px",
                                                 opacity: 0.7
                                             }}>
                                                 {letter.letter_lower}
