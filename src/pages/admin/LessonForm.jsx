@@ -19,6 +19,7 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
         object_image_second: null,
         object_image_third: null,
         audio_file: null,
+        quiz_file: null,
     });
 
     const [error, setError] = useState(null);
@@ -77,6 +78,7 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
                     object_image_second: null,
                     object_image_third: null,
                     audio_file: null,
+                    quiz_file: null,
                 });
 
                 // Очищаємо інпути файлів
@@ -225,6 +227,17 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
                     accept="audio/*"
                     style={{ marginBottom: "10px" }}
                     required={!isEditing}
+                />
+            </div>
+
+            <div>
+                <label>Файл JSON:</label>
+                <input
+                    type="file"
+                    name="quiz_file"
+                    onChange={handleFileChange}
+                    accept="application/*"
+                    style={{ marginBottom: "10px" }}
                 />
             </div>
 

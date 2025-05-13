@@ -79,11 +79,18 @@ export default function LessonsListPage() {
         <div>
             <div style={styles.header}>
                 <h1>Управління уроками</h1>
+                <div style={styles.buttonContainer}>
                 <Button
                     onClick={() => navigate("/admin/lessons/create")}
                     text="Створити новий урок"
                     color="#4caf50"
                 />
+                <Button
+                    onClick={() => navigate("/admin")}
+                    text="Повернутись"
+                    color="#4caf50"
+                />
+                </div>
             </div>
 
             <div style={styles.filterSection}>
@@ -135,6 +142,10 @@ const styles = {
         justifyContent: "space-between",
         alignItems: "center",
         marginBottom: "20px",
+    },
+    buttonContainer: {
+        display: "flex",
+        gap: "10px", // Додаємо відстань між кнопками
     },
     filterSection: {
         marginBottom: "20px",
