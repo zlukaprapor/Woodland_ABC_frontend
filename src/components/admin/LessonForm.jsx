@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { formStyles } from "../../styles/commonStyles.jsx";
-import FormInput from "../../components/FormInput.jsx";
-import StatusMessage from "../../components/StatusMessage.jsx";
-import Button from "../../components/Button.jsx";
+import React, {useState} from "react";
+import FormInput from "../auth/FormInput.jsx";
+import StatusMessage from "../auth/StatusMessage.jsx";
+import Button from "../ui/Button.jsx";
+import {adminStyles} from "../../styles/adminStyles.js";
 
-export default function LessonForm({ initialData = {}, onSubmit, isEditing = false }) {
+export default function LessonForm({initialData = {}, onSubmit, isEditing = false}) {
     const [formData, setFormData] = useState({
         letter_upper: initialData.letter_upper || "",
         letter_lower: initialData.letter_lower || "",
@@ -27,11 +27,11 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
     const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setFormData({...formData, [e.target.name]: e.target.value});
     };
 
     const handleFileChange = (e) => {
-        setFiles({ ...files, [e.target.name]: e.target.files[0] });
+        setFiles({...files, [e.target.name]: e.target.files[0]});
     };
 
     const handleSubmit = async (e) => {
@@ -99,17 +99,12 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
         }
     };
 
-    const formStyle = {
-        ...formStyles.form,
-        maxWidth: "500px",
-    };
-
     return (
-        <form onSubmit={handleSubmit} style={formStyle}>
+        <form onSubmit={handleSubmit} style={adminStyles.form}>
             <h2>{isEditing ? "Редагувати урок" : "Створити новий урок"}</h2>
 
-            <div style={{ display: "flex", gap: "10px" }}>
-                <div style={{ flex: 1 }}>
+            <div style={adminStyles.formRow}>
+                <div style={adminStyles.formColumn}>
                     <label>Велика літера:</label>
                     <FormInput
                         name="letter_upper"
@@ -121,7 +116,7 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
                     />
                 </div>
 
-                <div style={{ flex: 1 }}>
+                <div style={adminStyles.formColumn}>
                     <label>Мала літера:</label>
                     <FormInput
                         name="letter_lower"
@@ -141,7 +136,7 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
                     placeholder="Невеликі рифмовані вірші"
                     value={formData.description}
                     onChange={handleChange}
-                    style={{ ...formStyles.input, minHeight: "100px" }}
+                    style={adminStyles.textareaField}
                     required={!isEditing}
                 />
             </div>
@@ -153,7 +148,7 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
                     placeholder="Тренувальні склади"
                     value={formData.training}
                     onChange={handleChange}
-                    style={{ ...formStyles.input, minHeight: "100px" }}
+                    style={adminStyles.textareaField}
                     required={!isEditing}
                 />
             </div>
@@ -165,19 +160,19 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
                     placeholder="Правила проведення уроку"
                     value={formData.regulations}
                     onChange={handleChange}
-                    style={{ ...formStyles.input, minHeight: "100px" }}
+                    style={adminStyles.textareaField}
                     required={!isEditing}
                 />
             </div>
 
-            <div style={{ marginTop: "15px" }}>
+            <div style={adminStyles.formGroup}>
                 <label>Зображення літери:</label>
                 <input
                     type="file"
                     name="letter_image"
                     onChange={handleFileChange}
                     accept="image/*"
-                    style={{ marginBottom: "10px" }}
+                    style={adminStyles.fileInput}
                     required={!isEditing}
                 />
             </div>
@@ -189,7 +184,7 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
                     name="object_image_first"
                     onChange={handleFileChange}
                     accept="image/*"
-                    style={{ marginBottom: "10px" }}
+                    style={adminStyles.fileInput}
                     required={!isEditing}
                 />
             </div>
@@ -201,7 +196,7 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
                     name="object_image_second"
                     onChange={handleFileChange}
                     accept="image/*"
-                    style={{ marginBottom: "10px" }}
+                    style={adminStyles.fileInput}
                     required={!isEditing}
                 />
             </div>
@@ -213,7 +208,7 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
                     name="object_image_third"
                     onChange={handleFileChange}
                     accept="image/*"
-                    style={{ marginBottom: "10px" }}
+                    style={adminStyles.fileInput}
                     required={!isEditing}
                 />
             </div>
@@ -225,7 +220,7 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
                     name="audio_file"
                     onChange={handleFileChange}
                     accept="audio/*"
-                    style={{ marginBottom: "10px" }}
+                    style={adminStyles.fileInput}
                     required={!isEditing}
                 />
             </div>
@@ -237,7 +232,7 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
                     name="quiz_file"
                     onChange={handleFileChange}
                     accept="application/*"
-                    style={{ marginBottom: "10px" }}
+                    style={adminStyles.fileInput}
                 />
             </div>
 
@@ -245,11 +240,11 @@ export default function LessonForm({ initialData = {}, onSubmit, isEditing = fal
                 type="submit"
                 text={isLoading ? "Збереження..." : (isEditing ? "Оновити урок" : "Створити урок")}
                 color="#4caf50"
-                style={{ marginTop: "20px", width: "100%" }}
+                style={adminStyles.submitButton}
                 disabled={isLoading}
             />
 
-            <StatusMessage error={error} success={success} />
+            <StatusMessage error={error} success={success}/>
         </form>
     );
 }

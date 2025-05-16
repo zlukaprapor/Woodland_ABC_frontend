@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Button({ onClick, text, color = "#ffb74d", style, ...props }) {
+export default function Button({onClick, text, color = "#ffb74d", style, ...props}) {
     const buttonStyle = {
         backgroundColor: color,
         border: "none",

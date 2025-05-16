@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import FormInput from "./FormInput";
-import StatusMessage from "./StatusMessage";
-import { formStyles } from "../styles/commonStyles";
-import { loginUser, registerUser } from "../api/auth";
-import { saveAuthData } from "../services/authService";
+import React, {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import FormInput from "./FormInput.jsx";
+import StatusMessage from "./StatusMessage.jsx";
+import {loginUser, registerUser} from "../../api/auth.jsx";
+import {saveAuthData} from "../../services/authService.jsx";
+import {authFormStyles} from "../../styles/authStyles.js";
 
-export default function AuthForm({ isLogin = true }) {
+export default function AuthForm({isLogin = true}) {
     const initialFormData = isLogin
-        ? { email: "", password: "" }
-        : { username: "", email: "", password: "" };
+        ? {email: "", password: ""}
+        : {username: "", email: "", password: ""};
 
     const [formData, setFormData] = useState(initialFormData);
     const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ export default function AuthForm({ isLogin = true }) {
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setFormData({...formData, [e.target.name]: e.target.value});
     };
 
     const handleSubmit = async (e) => {
@@ -31,7 +31,7 @@ export default function AuthForm({ isLogin = true }) {
         try {
             if (isLogin) {
                 const res = await loginUser(formData);
-                const { access_token, user } = res;
+                const {access_token, user} = res;
 
                 saveAuthData(access_token, user);
                 setSuccess("Вхід успішний! 🎉");
@@ -39,10 +39,10 @@ export default function AuthForm({ isLogin = true }) {
                 // Перенаправлення відповідно до ролі
                 setTimeout(() => {
                     if (user.role === "admin") {
-                        navigate("/admin", { replace: true });
+                        navigate("/admin", {replace: true});
                     } else {
                         // Для звичайного користувача - перенаправлення на алфавіт
-                        navigate("/dashboard", { replace: true });
+                        navigate("/dashboard", {replace: true});
                     }
                 }, 1000);
             } else {
@@ -64,12 +64,8 @@ export default function AuthForm({ isLogin = true }) {
     };
 
     return (
-        <form onSubmit={handleSubmit} style={formStyles.form}>
-            <h2 style={{
-                color: "#2E7D32",
-                marginBottom: "20px",
-                textAlign: "center"
-            }}>
+        <form onSubmit={handleSubmit} style={authFormStyles.form}>
+            <h2 style={authFormStyles.header}>
                 {isLogin ? "🌲 Вхід до Лісової абетки" : "🎉 Реєстрація в Лісовій абетці"}
             </h2>
 
@@ -104,7 +100,7 @@ export default function AuthForm({ isLogin = true }) {
             <button
                 type="submit"
                 style={{
-                    ...formStyles.button,
+                    ...authFormStyles.button,
                     backgroundColor: isLogin ? "#66BB6A" : "#4CAF50",
                     opacity: isLoading ? 0.7 : 1,
                     cursor: isLoading ? "wait" : "pointer"
@@ -116,23 +112,15 @@ export default function AuthForm({ isLogin = true }) {
                     : (isLogin ? "Увійти" : "Зареєструватися")}
             </button>
 
-            <StatusMessage error={error} success={success} />
+            <StatusMessage error={error} success={success}/>
 
-            <div style={{
-                marginTop: "15px",
-                textAlign: "center",
-                fontSize: "14px"
-            }}>
+            <div style={authFormStyles.container}>
                 {isLogin ? (
                     <p>
                         Немає облікового запису?{" "}
                         <span
                             onClick={() => navigate("/register")}
-                            style={{
-                                color: "#4CAF50",
-                                cursor: "pointer",
-                                fontWeight: "bold",
-                            }}
+                            style={authFormStyles.statusMes}
                         >
                             Зареєструватися
                         </span>
@@ -142,23 +130,16 @@ export default function AuthForm({ isLogin = true }) {
                         Вже є обліковий запис?{" "}
                         <span
                             onClick={() => navigate("/login")}
-                            style={{
-                                color: "#4CAF50",
-                                cursor: "pointer",
-                                fontWeight: "bold",
-                            }}
+                            style={authFormStyles.statusMes}
                         >
                             Увійти
                         </span>
                     </p>
                 )}
-                <p style={{ marginTop: "10px" }}>
+                <p style={authFormStyles.navigateP}>
                     <span
                         onClick={() => navigate("/")}
-                        style={{
-                            color: "#888",
-                            cursor: "pointer",
-                        }}
+                        style={authFormStyles.navigateSpan}
                     >
                         ← На головну
                     </span>

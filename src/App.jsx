@@ -1,15 +1,15 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import RegisterPage from "./pages/RegisterPage";
-import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./components/auth/RegisterPage.jsx";
+import LoginPage from "./components/auth/LoginPage.jsx";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
-import PrivateRoute from "./components/PrivateRoute";
-import LessonsListPage from "./pages/admin/LessonsListPage";
-import CreateLessonPage from "./pages/admin/CreateLessonPage";
-import EditLessonPage from "./pages/admin/EditLessonPage";
-import LessonPage from "./pages/LessonPage";
+import PrivateRoute from "./components/securyty/PrivateRoute.jsx";
+import LessonsListPage from "./components/admin/LessonsListPage";
+import CreateLessonPage from "./components/admin/CreateLessonPage";
+import EditLessonPage from "./components/admin/EditLessonPage";
+import LessonPage from "./components/lesson/LessonPage.jsx";
 
 function App() {
     return (

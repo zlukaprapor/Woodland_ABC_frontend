@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { getLessons } from "../api/lessons";
-import { getAuthUser } from "../services/authService";
-import { pageStyles } from "../styles/commonStyles";
+import React, {useState, useEffect} from "react";
+import {useNavigate} from "react-router-dom";
+import {getLessons} from "../api/lessons";
+import {getAuthUser} from "../services/authService";
+import {userDashboardStyles} from "../styles/pagesStyles.js";
 
 export default function UserDashboard() {
     const [letters, setLetters] = useState([]);
@@ -67,65 +67,32 @@ export default function UserDashboard() {
     console.log("Кількість уроків:", letters?.length);
 
     return (
-        <div style={{
-            ...pageStyles.container,
-            backgroundColor: "#E8F5E9",
-            minHeight: "100vh",
-            padding: "20px"
-        }}>
-            <div style={{
-                ...pageStyles.card,
-                width: "90%",
-                maxWidth: "800px",
-                backgroundColor: "rgba(255, 255, 255, 0.85)", // Напівпрозорий фон
-                borderRadius: "20px",
-                padding: "30px",
-                boxShadow: "0 10px 20px rgba(0,0,0,0.1)"
-            }}>
-                <h1 style={{
-                    ...pageStyles.title,
-                    color: "#2E7D32",
-                    marginBottom: "10px"
-                }}>🌳 Лісова абетка 🦊</h1>
+        <div style={userDashboardStyles.pageContainer}>
+            <div style={userDashboardStyles.contentCard}>
+                <h1 style={userDashboardStyles.pageTitle}>
+                    🌳 Лісова абетка 🦊
+                </h1>
 
                 {user && (
-                    <p style={{
-                        fontSize: "18px",
-                        color: "#5D4037",
-                        marginBottom: "20px"
-                    }}>
+                    <p style={userDashboardStyles.userGreeting}>
                         Привіт, {user.username || "юний друже"}! 👋
                     </p>
                 )}
 
                 {loading ? (
-                    <div style={{ textAlign: "center", padding: "20px" }}>
+                    <div style={{textAlign: "center", padding: "20px"}}>
                         <p>Завантаження літер...</p>
-                        <div style={{
-                            borderTop: "5px dotted #AED581",
-                            margin: "10px auto",
-                            width: "50px"
-                        }}></div>
+                        <div style={userDashboardStyles.loadingIndicator}></div>
                     </div>
                 ) : error ? (
-                    <p style={{ color: "red", textAlign: "center" }}>{error}</p>
+                    <p style={{color: "red", textAlign: "center"}}>{error}</p>
                 ) : (
                     <>
-                        <p style={{
-                            ...pageStyles.subtitle,
-                            color: "#5D4037",
-                            marginBottom: "20px",
-                            fontSize: "18px"
-                        }}>
+                        <p style={userDashboardStyles.selectionPrompt}>
                             Обери літеру для вивчення:
                         </p>
 
-                        <div style={{
-                            display: "flex",
-                            flexWrap: "wrap",
-                            justifyContent: "center",
-                            gap: "15px"
-                        }}>
+                        <div style={userDashboardStyles.lettersGrid}>
                             {letters && letters.length > 0 ? (
                                 letters.map((letter) => {
                                     const bgColor = getRandomColor();
@@ -134,22 +101,8 @@ export default function UserDashboard() {
                                         <div
                                             key={letter.id}
                                             style={{
-                                                width: "150px",
-                                                height: "150px",
-                                                borderRadius: "12px",
+                                                ...userDashboardStyles.letterCard,
                                                 backgroundColor: bgColor,
-                                                display: "flex",
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                fontSize: "86px",
-                                                fontWeight: "bold",
-                                                cursor: "pointer",
-                                                boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-                                                transition: "transform 0.3s, box-shadow 0.3s",
-                                                border: "3px solid #FFC107",
-                                                color: "#5D4037",
-                                                position: "relative",
-                                                overflow: "hidden"
                                             }}
                                             onClick={() => handleLetterClick(letter)}
                                             onMouseEnter={(e) => {
@@ -162,24 +115,18 @@ export default function UserDashboard() {
                                             }}
                                         >
                                             {letter.letter_upper}
-                                            <div style={{
-                                                position: "absolute",
-                                                bottom: "3px",
-                                                right: "3px",
-                                                fontSize: "34px",
-                                                opacity: 0.7
-                                            }}>
+                                            <div style={userDashboardStyles.letterLowercase}>
                                                 {letter.letter_lower}
                                             </div>
                                         </div>
                                     );
                                 })
                             ) : (
-                                <div style={{ textAlign: "center", padding: "20px" }}>
-                                    <p style={{ color: "#5D4037" }}>
+                                <div style={userDashboardStyles.emptyStateContainer}>
+                                    <p style={userDashboardStyles.emptyStateMessage}>
                                         Літери ще не додані. Повертайтеся пізніше!
                                     </p>
-                                    <p style={{ color: "#5D4037", fontSize: "14px", marginTop: "10px" }}>
+                                    <p style={userDashboardStyles.emptyStateHint}>
                                         Адміністратор може додати уроки в панелі адміністратора.
                                     </p>
                                 </div>
@@ -188,16 +135,8 @@ export default function UserDashboard() {
                     </>
                 )}
 
-                <div style={{
-                    marginTop: "30px",
-                    textAlign: "center",
-                    borderTop: "2px dashed #AED581",
-                    paddingTop: "20px"
-                }}>
-                    <p style={{
-                        color: "#5D4037",
-                        fontSize: "14px"
-                    }}>
+                <div style={userDashboardStyles.footerSection}>
+                    <p style={userDashboardStyles.footerText}>
                         Вивчайте і грайтеся разом з нами! 🌲🦊🌞
                     </p>
                 </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getLessons, deleteLesson } from "../../api/lessons.jsx";
 import LessonCard from "./LessonCard.jsx";
-import Button from "../../components/Button.jsx";
+import Button from "../ui/Button.jsx";
 
 export default function LessonsListPage() {
     const [lessons, setLessons] = useState([]);

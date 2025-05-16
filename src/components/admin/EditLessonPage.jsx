@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, {useState, useEffect} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 import LessonForm from "./LessonForm.jsx";
-import { getLessonById, updateLesson } from "../../api/lessons.jsx";
+import {getLessonById, updateLesson} from "../../api/lessons.jsx";
+import {adminStyles} from "../../styles/adminStyles.js";
 
 export default function EditLessonPage() {
     const [lesson, setLesson] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const { lessonId } = useParams();
+    const {lessonId} = useParams();
     const navigate = useNavigate();
 
     // Завантаження даних уроку
@@ -46,22 +46,22 @@ export default function EditLessonPage() {
     }
 
     if (error) {
-        return <div style={{ color: "red" }}>{error}</div>;
+        return <div style={{color: "red"}}>{error}</div>;
     }
 
     return (
-        <div style={styles.container}>
-            <div style={styles.header}>
+        <div style={adminStyles.container}>
+            <div style={adminStyles.header}>
                 <h1>Редагування уроку</h1>
                 <button
                     onClick={() => navigate("/admin/lessons")}
-                    style={styles.backButton}
+                    style={adminStyles.backButton}
                 >
                     ← Назад до списку
                 </button>
             </div>
 
-            <div style={styles.formContainer}>
+            <div style={adminStyles.formContainer}>
                 {lesson && (
                     <LessonForm
                         initialData={lesson}
@@ -73,31 +73,3 @@ export default function EditLessonPage() {
         </div>
     );
 }
-
-const styles = {
-    container: {
-        padding: "20px",
-        maxWidth: "800px",
-        margin: "0 auto",
-    },
-    header: {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "20px",
-    },
-    backButton: {
-        padding: "8px 16px",
-        backgroundColor: "#f0f0f0",
-        border: "none",
-        borderRadius: "5px",
-        cursor: "pointer",
-        fontSize: "14px",
-    },
-    formContainer: {
-        backgroundColor: "#fff",
-        borderRadius: "8px",
-        padding: "20px",
-        boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-    },
-};

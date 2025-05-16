@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { formStyles } from "../styles/commonStyles";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import React, {useState} from "react";
+import {formInputStyles} from "../../styles/authStyles.js";
+import {FaEye, FaEyeSlash} from "react-icons/fa";
 
 export default function FormInput({
                                       type = "text",
@@ -19,22 +19,22 @@ export default function FormInput({
 
     if (isPassword) {
         return (
-            <div style={formStyles.inputGroup}>
+            <div style={formInputStyles.inputGroup}>
                 <input
                     name={name}
                     type={showPassword ? "text" : "password"}
                     placeholder={placeholder}
                     value={value}
                     onChange={onChange}
-                    style={formStyles.input}
+                    style={formInputStyles.input}
                     required={required}
                 />
                 <button
                     type="button"
                     onClick={togglePasswordVisibility}
-                    style={formStyles.toggleButton}
+                    style={formInputStyles.toggleButton}
                 >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    {showPassword ? <FaEyeSlash/> : <FaEye/>}
                 </button>
             </div>
         );
@@ -47,7 +47,7 @@ export default function FormInput({
             placeholder={placeholder}
             value={value}
             onChange={onChange}
-            style={formStyles.input}
+            style={formInputStyles.input}
             required={required}
         />
     );

@@ -1,20 +1,19 @@
-import { useNavigate } from "react-router-dom";
-import Button from "../components/Button";
-import { pageStyles } from "../styles/commonStyles";
+import React from "react";
+import {useNavigate} from "react-router-dom";
+import Button from "../components/ui/Button.jsx";
+import {homePageStyles} from "../styles/pagesStyles.js";
 
 export default function HomePage() {
     const navigate = useNavigate();
 
     return (
-        <div style={pageStyles.container}>
-            <div style={pageStyles.card}>
-                <h1 style={pageStyles.title}>👋 Вітаємо у “Лісовій абетці”!</h1>
-                <p style={pageStyles.subtitle}>Навчайся граючись 🌲🦊</p>
-                <Button onClick={() => navigate("/register")} text="Реєстрація" />
-                <Button onClick={() => navigate("/login")} text="Увійти" color="#66bb6a" />
+        <div style={homePageStyles.pageContainer}>
+            <div style={homePageStyles.welcomeCard}>
+                <h1 style={homePageStyles.welcomeTitle}>👋 Вітаємо у "Лісовій абетці"!</h1>
+                <p style={homePageStyles.welcomeSubtitle}>Навчайся граючись 🌲🦊</p>
+                <Button onClick={() => navigate("/register")} text="Реєстрація"/>
+                <Button onClick={() => navigate("/login")} text="Увійти" color="#66bb6a"/>
             </div>
         </div>
     );
 }
-
-
