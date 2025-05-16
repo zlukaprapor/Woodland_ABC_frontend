@@ -10,6 +10,8 @@ import LessonsListPage from "./components/admin/LessonsListPage";
 import CreateLessonPage from "./components/admin/CreateLessonPage";
 import EditLessonPage from "./components/admin/EditLessonPage";
 import LessonPage from "./components/lesson/LessonPage.jsx";
+import QuizPage from "./components/quiz/QuizPage.jsx";
+
 
 function App() {
     return (
@@ -31,6 +33,14 @@ function App() {
                     element={
                         <PrivateRoute>
                             <LessonPage />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/quiz/:lessonId"
+                    element={
+                        <PrivateRoute>
+                            <QuizPage />
                         </PrivateRoute>
                     }
                 />

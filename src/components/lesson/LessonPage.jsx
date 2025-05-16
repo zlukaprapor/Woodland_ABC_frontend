@@ -83,7 +83,7 @@ export default function LessonPage() {
                                     style={lessonPageStyles.headerButtonStyle}
                                 />
                                 <Button
-                                    onClick={() => navigate("/dashboard")}
+                                    onClick={() => navigate(`/quiz/${lessonId}`)}
                                     text="До тестування ➡️"
                                     color="#FFA726"
                                     style={lessonPageStyles.headerButtonStyle}
