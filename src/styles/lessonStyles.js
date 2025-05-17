@@ -180,7 +180,7 @@ export const lessonPageStyles = {
     },
 
     infoBlockText: {
-        color: "#ee0a52",
+        color: "#33691E",
         fontSize: "15px",
         lineHeight: "1.4",
         fontWeight: "bold",
@@ -283,7 +283,7 @@ export const modalStyles = {
         backgroundColor: "#fff8e1",
         borderRadius: "20px",
         padding: "30px",
-        maxWidth: "500px",
+        maxWidth: "700px",
         textAlign: "center",
         boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
         position: "relative",

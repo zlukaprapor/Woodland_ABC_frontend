@@ -165,4 +165,12 @@ export const userDashboardStyles = {
         color: "#5D4037",
         fontSize: "14px"
     },
+    lockOverlay: {
+        position: "absolute",
+        top: "5px",
+        right: "10px",
+        fontSize: "20px",
+        color: "#333",
+        pointerEvents: "none",
+    },
 };
