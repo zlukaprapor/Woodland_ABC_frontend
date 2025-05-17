@@ -2,7 +2,7 @@
 export const quizPageStyles = {
     // Головний контейнер
     mainContainer: {
-        backgroundImage: "url('/gpt/ChatGPT Image 6 квіт. 2025 р., 12_11_35.png')",
+        backgroundImage: "url('/gpt/Background.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",

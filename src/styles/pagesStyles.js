@@ -1,7 +1,7 @@
 // Стилі для головної сторінки
 export const homePageStyles = {
     pageContainer: {
-        backgroundImage: "url('/home.png')",
+        backgroundImage: "url('/Home.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         height: "100vh",
@@ -72,7 +72,7 @@ export const adminDashboardStyles = {
 // Стилі для панелі користувача
 export const userDashboardStyles = {
     pageContainer: {
-        backgroundImage: "url('/home.png')",
+        backgroundImage: "url('/Home.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         height: "100vh",

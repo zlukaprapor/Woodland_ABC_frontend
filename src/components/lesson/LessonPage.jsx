@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import {getLessonById} from "../../api/lessons.jsx";
 import Button from "../ui/Button.jsx";
+import OwlModalButton from '../ui/OwlModalButton';
 import {lessonPageStyles,modalStyles} from "../../styles/lessonStyles.js";
 
 export default function LessonPage() {
@@ -54,18 +55,30 @@ export default function LessonPage() {
                 <div style={modalStyles.overlay}>
                     <div style={modalStyles.content}>
                         <img
-                            src="/gpt/owl/ChatGPT Image Apr 6, 2025, 04_32_19 PM.png"
+                            src="/owl/OwlModal.png"
                             alt="Сова"
                             style={modalStyles.owlImage}
                         />
-                        <h2>Привіт! Я Совеня 🦉</h2>
-                        <p>{lesson.regulations}</p>
+                        <h2>Привіт! Я Совеня</h2>
+                        <div style={{ maxHeight: '60vh', overflowY: 'auto', whiteSpace: 'pre-wrap' }}>
+                        {lesson.regulations
+                            .split(/🔹|📌/)
+                            .map((item, index) =>
+                                item.trim() ? (
+                                    <p key={index} style={{ marginBottom: '5px' }}>
+                                        {lesson.regulations.includes('📌' + item) ? '📌' : '🔹'} {item.trim()}
+                                    </p>
+                                ) : null
+                            )}
+                        </div>
                         <button style={modalStyles.button} onClick={() => setShowModal(false)}>
                             Зрозуміло!
                         </button>
                     </div>
                 </div>
             )}
+            {/* 🦉 Кнопка-сова — Після того, як модалка закрита */}
+            <OwlModalButton showModal={showModal} setShowModal={setShowModal} />
             <div style={lessonPageStyles.contentWrapper}>
                 {loading ? (
                     <div style={lessonPageStyles.loadingContainer}>
@@ -146,19 +159,19 @@ export default function LessonPage() {
                                 )}
 
                                 {/* Додаткова інформація */}
-
                                 {lesson.training && (
                                     <div style={lessonPageStyles.infoBlock}>
                                         <h3 style={lessonPageStyles.infoBlockTitle}>
                                             Вчимо звуки:
                                         </h3>
                                         {lesson.training.split('\\n').map((line, index) => (
-                                        <p key={index} style={lessonPageStyles.infoBlockText}>
-                                            {line.trim()}
-                                        </p>
+                                            <p key={index} style={lessonPageStyles.infoBlockText}>
+                                                {line.trim()}
+                                            </p>
                                         ))}
                                     </div>
                                 )}
+
                                 {lesson.description && (
                                     <div style={lessonPageStyles.infoBlock}>
                                         <h3 style={lessonPageStyles.infoBlockTitle}>
@@ -171,6 +184,7 @@ export default function LessonPage() {
                                         ))}
                                     </div>
                                 )}
+
                                {/* {lesson.regulations && (
                                     <div style={lessonPageStyles.infoBlock}>
                                         <h3 style={lessonPageStyles.infoBlockTitle}>
