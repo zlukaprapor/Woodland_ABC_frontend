@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import {getLessonById} from "../../api/lessons.jsx";
 import Button from "../ui/Button.jsx";
-import {lessonPageStyles} from "../../styles/lessonStyles.js";
+import {lessonPageStyles,modalStyles} from "../../styles/lessonStyles.js";
 
 export default function LessonPage() {
     const {lessonId} = useParams();
@@ -10,6 +10,7 @@ export default function LessonPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+    const [showModal, setShowModal] = useState(true);
 
     const API_BASE_URL = "http://127.0.0.1:8000/uploads";
 
@@ -46,7 +47,25 @@ export default function LessonPage() {
     };
 
     return (
+
         <div style={lessonPageStyles.mainContainer}>
+            {/* 🦉 Модальне вікно з правилами */}
+            {showModal && lesson?.regulations && (
+                <div style={modalStyles.overlay}>
+                    <div style={modalStyles.content}>
+                        <img
+                            src="/gpt/owl/ChatGPT Image Apr 6, 2025, 04_32_19 PM.png"
+                            alt="Сова"
+                            style={modalStyles.owlImage}
+                        />
+                        <h2>Привіт! Я Совеня 🦉</h2>
+                        <p>{lesson.regulations}</p>
+                        <button style={modalStyles.button} onClick={() => setShowModal(false)}>
+                            Зрозуміло!
+                        </button>
+                    </div>
+                </div>
+            )}
             <div style={lessonPageStyles.contentWrapper}>
                 {loading ? (
                     <div style={lessonPageStyles.loadingContainer}>
@@ -133,9 +152,11 @@ export default function LessonPage() {
                                         <h3 style={lessonPageStyles.infoBlockTitle}>
                                             Вчимо звуки:
                                         </h3>
-                                        <p style={lessonPageStyles.infoBlockText}>
-                                            {lesson.training}
+                                        {lesson.training.split('\\n').map((line, index) => (
+                                        <p key={index} style={lessonPageStyles.infoBlockText}>
+                                            {line.trim()}
                                         </p>
+                                        ))}
                                     </div>
                                 )}
                                 {lesson.description && (
@@ -143,12 +164,14 @@ export default function LessonPage() {
                                         <h3 style={lessonPageStyles.infoBlockTitle}>
                                             Віршики:
                                         </h3>
-                                        <p style={lessonPageStyles.infoBlockText}>
-                                            {lesson.description}
+                                        {lesson.description.split('\\n').map((line, index) => (
+                                        <p key={index} style={lessonPageStyles.infoBlockText}>
+                                            {line.trim()}
                                         </p>
+                                        ))}
                                     </div>
                                 )}
-                                {lesson.regulations && (
+                               {/* {lesson.regulations && (
                                     <div style={lessonPageStyles.infoBlock}>
                                         <h3 style={lessonPageStyles.infoBlockTitle}>
                                             Правила:
@@ -157,7 +180,7 @@ export default function LessonPage() {
                                             {lesson.regulations}
                                         </p>
                                     </div>
-                                )}
+                                )}*/}
                             </div>
 
                             {/* Права колонка */}

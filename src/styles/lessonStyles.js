@@ -264,3 +264,43 @@ export const lessonPageStyles = {
         fontSize: "42px"
     },
 };
+// 🦉 Стилі для модального вікна
+export const modalStyles = {
+    overlay: {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        zIndex: 1000,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    content: {
+        backgroundColor: "#fff8e1",
+        borderRadius: "20px",
+        padding: "30px",
+        maxWidth: "500px",
+        textAlign: "center",
+        boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+        position: "relative",
+        fontFamily: "Comic Sans MS, cursive",
+    },
+    owlImage: {
+        width: "150px",
+        height: "auto",
+        marginBottom: "20px",
+    },
+    button: {
+        marginTop: "20px",
+        padding: "10px 20px",
+        fontSize: "16px",
+        borderRadius: "10px",
+        border: "none",
+        backgroundColor: "#4CAF50",
+        color: "white",
+        cursor: "pointer",
+    },
+};
