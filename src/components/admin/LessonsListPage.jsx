@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getLessons, deleteLesson } from "../../api/lessons.jsx";
 import LessonCard from "./LessonCard.jsx";
 import Button from "../ui/Button.jsx";
+import {adminStyles} from "../../styles/adminStyles.js";
 
 export default function LessonsListPage() {
     const [lessons, setLessons] = useState([]);
@@ -77,9 +78,9 @@ export default function LessonsListPage() {
 
     return (
         <div>
-            <div style={styles.header}>
+            <div style={adminStyles.header}>
                 <h1>Управління уроками</h1>
-                <div style={styles.buttonContainer}>
+                <div style={adminStyles.buttonContainer}>
                 <Button
                     onClick={() => navigate("/admin/lessons/create")}
                     text="Створити новий урок"
@@ -93,22 +94,22 @@ export default function LessonsListPage() {
                 </div>
             </div>
 
-            <div style={styles.filterSection}>
-                <form onSubmit={handleFilterSubmit} style={styles.filterForm}>
+            <div style={adminStyles.filterSection}>
+                <form onSubmit={handleFilterSubmit} style={adminStyles.filterForm}>
                     <input
                         type="text"
                         value={filter}
                         onChange={handleFilterChange}
                         placeholder="Фільтр за літерою"
-                        style={styles.filterInput}
+                        style={adminStyles.filterInput}
                     />
                     <Button type="submit" text="Фільтрувати" color="#2196f3" />
                 </form>
             </div>
 
-            {error && <p style={styles.error}>{error}</p>}
+            {error && <p style={adminStyles.error}>{error}</p>}
 
-            <div style={styles.lessonsList}>
+            <div style={adminStyles.lessonsList}>
                 {lessons.length === 0 && !loading ? (
                     <p>Уроки не знайдено</p>
                 ) : (
@@ -123,7 +124,7 @@ export default function LessonsListPage() {
             </div>
 
             {pagination.hasMore && (
-                <div style={styles.loadMoreContainer}>
+                <div style={adminStyles.loadMoreContainer}>
                     <Button
                         onClick={() => loadLessons()}
                         text={loading ? "Завантаження..." : "Завантажити більше"}
@@ -136,44 +137,3 @@ export default function LessonsListPage() {
     );
 }
 
-const styles = {
-    header: {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "20px",
-    },
-    buttonContainer: {
-        display: "flex",
-        gap: "10px", // Додаємо відстань між кнопками
-    },
-    filterSection: {
-        marginBottom: "20px",
-    },
-    filterForm: {
-        display: "flex",
-        gap: "10px",
-    },
-    filterInput: {
-        padding: "12px",
-        borderRadius: "5px",
-        border: "1px solid #ddd",
-        flex: 1,
-    },
-    lessonsList: {
-        marginTop: "20px",
-    },
-    error: {
-        color: "#f44336",
-        padding: "10px",
-        backgroundColor: "#ffebee",
-        borderRadius: "5px",
-        marginBottom: "20px",
-    },
-    loadMoreContainer: {
-        display: "flex",
-        justifyContent: "center",
-        marginTop: "20px",
-        marginBottom: "40px",
-    },
-};

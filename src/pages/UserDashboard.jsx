@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getLessons } from "../api/lessons";
 import { getProgress } from "../api/progress";
 import { getAuthUser } from "../services/authService";
+import {logout} from "../services/authService";
 import { userDashboardStyles } from "../styles/pagesStyles.js";
 
 export default function UserDashboard() {
@@ -76,9 +77,20 @@ export default function UserDashboard() {
         return colors[Math.floor(Math.random() * colors.length)];
     };
 
+    const handleLogout = () => {
+        logout();
+        navigate("/login");
+    };
+
     return (
         <div style={userDashboardStyles.pageContainer}>
             <div style={userDashboardStyles.contentCard}>
+                <button
+                    onClick={handleLogout}
+                    style={userDashboardStyles.logOutButton}
+                >
+                    Вийти
+                </button>
                 <h1 style={userDashboardStyles.pageTitle}>🌳 Лісова абетка 🦊</h1>
 
                 {user && (

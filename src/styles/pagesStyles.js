@@ -27,6 +27,7 @@ export const homePageStyles = {
         color: "#555",
         marginBottom: "30px",
     },
+
 };
 
 // Стилі для панелі адміністратора
@@ -92,6 +93,19 @@ export const userDashboardStyles = {
         borderRadius: "20px",
         textAlign: "center",
         boxShadow: "0 10px 20px rgba(0,0,0,0.1)"
+    },
+    logOutButton: {
+        backgroundColor: "#f44336",
+        color: "white",
+        border: "none",
+        borderRadius: "4px",
+        padding: "8px 16px",
+        cursor: "pointer",
+        fontWeight: "bold",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+        position: "absolute",
+        top: "20px",
+        right: "20px",
     },
     pageTitle: {
         fontSize: "2.5rem",
