@@ -1,13 +1,16 @@
 import apiClient from "./client";
 
 /**
- * Отримує список всіх уроків з можливістю фільтрації та пагінації
+ * Отримує список усіх уроків з можливістю фільтрації та пагінації.
  *
- * @param {Object} params - Параметри запиту
- * @param {number} [params.skip=0] - Кількість уроків для пропуску
- * @param {number} [params.limit=100] - Максимальна кількість уроків для отримання
- * @param {string} [params.letter_filter] - Фільтр за літерою
- * @returns {Promise<Object>} Список уроків
+ * @async
+ * @function
+ * @param {Object} params - Параметри запиту.
+ * @param {number} [params.skip=0] - Кількість записів, які потрібно пропустити.
+ * @param {number} [params.limit=100] - Максимальна кількість записів для отримання.
+ * @param {string} [params.letter_filter] - Фільтрація за літерою.
+ * @returns {Promise<Object[]>} Масив уроків.
+ * @throws Помилка при запиті до API.
  */
 export const getLessons = async (params = { limit: 100 }) => {
     try {
@@ -15,7 +18,6 @@ export const getLessons = async (params = { limit: 100 }) => {
         const response = await apiClient.get("/lessons", { params });
         console.log("Отримана відповідь від API:", response.data);
 
-        // Повертаємо items з пагінованої відповіді
         if (response.data && Array.isArray(response.data.items)) {
             return response.data.items;
         } else if (response.data && Array.isArray(response.data)) {
@@ -31,11 +33,15 @@ export const getLessons = async (params = { limit: 100 }) => {
         throw error;
     }
 };
+
 /**
- * Отримує урок за ID
+ * Отримує урок за його унікальним ідентифікатором.
  *
- * @param {number} lessonId - ID уроку
- * @returns {Promise<Object>} Дані уроку
+ * @async
+ * @function
+ * @param {number} lessonId - Унікальний ID уроку.
+ * @returns {Promise<Object>} Об'єкт уроку.
+ * @throws Помилка при запиті до API.
  */
 export const getLessonById = async (lessonId) => {
     try {
@@ -50,10 +56,13 @@ export const getLessonById = async (lessonId) => {
 };
 
 /**
- * Отримує урок за великою літерою
+ * Отримує урок за великою літерою.
  *
- * @param {string} letterUpper - Велика літера
- * @returns {Promise<Object>} Дані уроку
+ * @async
+ * @function
+ * @param {string} letterUpper - Велика літера українського алфавіту (наприклад: "А").
+ * @returns {Promise<Object>} Об'єкт уроку.
+ * @throws Помилка при запиті до API.
  */
 export const getLessonByLetter = async (letterUpper) => {
     try {
@@ -70,11 +79,20 @@ export const getLessonByLetter = async (letterUpper) => {
 };
 
 /**
- * Створює новий урок з медіафайлами
- * Тільки для адміністраторів
+ * Створює новий урок із завантаженням медіафайлів.
+ * **Доступно лише адміністраторам.**
  *
- * @param {FormData} formData - Дані уроку (letter_upper, letter_lower, description, letter_image, object_image, audio_file)
- * @returns {Promise<Object>} Створений урок
+ * @async
+ * @function
+ * @param {FormData} formData - Дані уроку (включно з файлами).
+ * @param {string} formData.letter_upper - Велика літера.
+ * @param {string} formData.letter_lower - Мала літера.
+ * @param {string} formData.description - Опис уроку.
+ * @param {File} formData.letter_image - Зображення літери.
+ * @param {File} formData.object_image - Зображення об'єкта.
+ * @param {File} formData.audio_file - Аудіофайл вимови.
+ * @returns {Promise<Object>} Створений урок.
+ * @throws Помилка при запиті до API.
  */
 export const createLesson = async (formData) => {
     try {
@@ -93,12 +111,15 @@ export const createLesson = async (formData) => {
 };
 
 /**
- * Оновлює існуючий урок
- * Тільки для адміністраторів
+ * Оновлює наявний урок.
+ * **Доступно лише адміністраторам.**
  *
- * @param {number} lessonId - ID уроку
- * @param {FormData} formData - Дані для оновлення
- * @returns {Promise<Object>} Оновлений урок
+ * @async
+ * @function
+ * @param {number} lessonId - ID уроку, який потрібно оновити.
+ * @param {FormData} formData - Дані для оновлення уроку.
+ * @returns {Promise<Object>} Оновлений урок.
+ * @throws Помилка при запиті до API.
  */
 export const updateLesson = async (lessonId, formData) => {
     try {
@@ -117,11 +138,14 @@ export const updateLesson = async (lessonId, formData) => {
 };
 
 /**
- * Видаляє урок за ID
- * Тільки для адміністраторів
+ * Видаляє урок за його ID.
+ * **Доступно лише адміністраторам.**
  *
- * @param {number} lessonId - ID уроку
- * @returns {Promise<Object>} Повідомлення про успішне видалення
+ * @async
+ * @function
+ * @param {number} lessonId - ID уроку, який потрібно видалити.
+ * @returns {Promise<Object>} Повідомлення про успішне видалення.
+ * @throws Помилка при запиті до API.
  */
 export const deleteLesson = async (lessonId) => {
     try {

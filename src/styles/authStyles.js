@@ -72,7 +72,7 @@ export const formInputStyles = {
 }
 export const loginPageStyles = {
     container: {
-        backgroundImage: "url('/Home.png')",
+        backgroundImage: "url('/HomePage.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         height: "100vh",
@@ -91,7 +91,7 @@ export const loginPageStyles = {
 }
 export const registerPageStyles = {
     container: {
-        backgroundImage: "url('/Home.png')",
+        backgroundImage: "url('/HomePage.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         height: "100vh",
