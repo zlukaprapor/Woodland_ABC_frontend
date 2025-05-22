@@ -2,6 +2,20 @@ import React, {useState} from "react";
 import {formInputStyles} from "../../styles/authStyles.js";
 import {FaEye, FaEyeSlash} from "react-icons/fa";
 
+/**
+ * Компонент FormInput — універсальне поле вводу з підтримкою режиму пароля.
+ * Якщо `isPassword` дорівнює true, додає кнопку для показу/приховування пароля.
+ *
+ * @param {string} type - тип поля вводу (text, email тощо)
+ * @param {string} name - ім'я поля (name атрибут)
+ * @param {string} value - поточне значення поля
+ * @param {function} onChange - обробник зміни значення
+ * @param {string} placeholder - текст-заповнювач
+ * @param {boolean} required - чи є поле обов'язковим
+ * @param {boolean} isPassword - чи є поле паролем
+ */
+
+
 export default function FormInput({
                                       type = "text",
                                       name,
@@ -17,6 +31,7 @@ export default function FormInput({
         setShowPassword(prev => !prev);
     };
 
+    // Якщо поле — парольне, показує кнопку
     if (isPassword) {
         return (
             <div style={formInputStyles.inputGroup}>
@@ -40,6 +55,7 @@ export default function FormInput({
         );
     }
 
+    // Звичайне текстове поле
     return (
         <input
             name={name}
