@@ -12,14 +12,24 @@ import EditLessonPage from "./components/admin/EditLessonPage";
 import LessonPage from "./components/lesson/LessonPage.jsx";
 import QuizPage from "./components/quiz/QuizPage.jsx";
 
-
+/**
+ * Головний компонент додатку, що містить маршрутизацію сторінок.
+ * Використовує React Router для переходів між сторінками.
+ * Деякі маршрути захищені через компонент PrivateRoute, що перевіряє автентифікацію
+ * та роль користувача.
+ */
 function App() {
     return (
         <BrowserRouter>
             <Routes>
+                {/* Головна сторінка */}
                 <Route path="/" element={<HomePage />} />
+
+                {/* Сторінки реєстрації та входу */}
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
+
+                {/* Дашборд користувача — доступ лише автентифікованим */}
                 <Route
                     path="/dashboard"
                     element={
@@ -28,6 +38,8 @@ function App() {
                         </PrivateRoute>
                     }
                 />
+
+                {/* Сторінка уроку — доступ лише автентифікованим */}
                 <Route
                     path="/lesson/:lessonId"
                     element={
@@ -36,6 +48,8 @@ function App() {
                         </PrivateRoute>
                     }
                 />
+
+                {/* Квіз по уроку — доступ лише автентифікованим */}
                 <Route
                     path="/quiz/:lessonId"
                     element={
@@ -44,6 +58,8 @@ function App() {
                         </PrivateRoute>
                     }
                 />
+
+                {/* Адмін панель — доступ лише адміністраторам */}
                 <Route
                     path="/admin"
                     element={
@@ -52,7 +68,8 @@ function App() {
                         </PrivateRoute>
                     }
                 />
-                {/* Додайте цей маршрут для списку уроків */}
+
+                {/* Управління уроками в адмін панелі */}
                 <Route
                     path="/admin/lessons"
                     element={
@@ -61,6 +78,8 @@ function App() {
                         </PrivateRoute>
                     }
                 />
+
+                {/* Створення уроку (адмін) */}
                 <Route
                     path="/admin/lessons/create"
                     element={
@@ -69,6 +88,8 @@ function App() {
                         </PrivateRoute>
                     }
                 />
+
+                {/* Редагування уроку (адмін) */}
                 <Route
                     path="/admin/lessons/edit/:lessonId"
                     element={

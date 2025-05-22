@@ -4,52 +4,53 @@ import { getLessonById } from "../../api/lessons.jsx";
 import Button from "../ui/Button.jsx";
 import { quizPageStyles } from "../../styles/quizStyles.js";
 
+/**
+ * Компонент QuizPage відповідає за відображення квізу (тесту),
+ * пов’язаного з певним уроком. Завантажує урок, витягує JSON з питаннями
+ * та відображає інтерфейс проходження тесту з фідбеком і результатами.
+ */
 export default function QuizPage() {
-    const { lessonId } = useParams();
-    const [lesson, setLesson] = useState(null);
-    const [quizData, setQuizData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const navigate = useNavigate();
+    const { lessonId } = useParams(); // Отримуємо ID уроку з URL
+    const [lesson, setLesson] = useState(null); // Дані уроку
+    const [quizData, setQuizData] = useState(null); // Питання квізу
+    const [loading, setLoading] = useState(true); // Стан завантаження
+    const [error, setError] = useState(null); // Повідомлення про помилки
+    const navigate = useNavigate(); // Навігація між сторінками
 
-    // Стан для відстеження прогресу квізу
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [selectedAnswer, setSelectedAnswer] = useState(null);
-    const [showFeedback, setShowFeedback] = useState(false);
-    const [score, setScore] = useState(0);
-    const [completed, setCompleted] = useState(false);
+    // Стан квізу
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // Індекс поточного питання
+    const [selectedAnswer, setSelectedAnswer] = useState(null); // Вибрана відповідь
+    const [showFeedback, setShowFeedback] = useState(false); // Відображення фідбеку
+    const [score, setScore] = useState(0); // Кількість правильних відповідей
+    const [completed, setCompleted] = useState(false); // Стан завершення квізу
 
-    const API_BASE_URL = "http://127.0.0.1:8000/uploads";
+    const API_BASE_URL = "http://127.0.0.1:8000/uploads"; // Базовий шлях до медіа
 
-    // Функція для правильного форматування шляху до медіа-файлів
+    /**
+     * Форматує шлях до медіа-файлу (заміна зворотних слешів на прямі).
+     * @param {string} path - відносний шлях до файлу
+     * @returns {string|null}
+     */
     const normalizePath = (path) =>
         path ? `${API_BASE_URL}/${path.replace(/\\/g, "/")}` : null;
 
+    /**
+     * Завантаження даних уроку та JSON-файлу з питаннями квізу при монтуванні компонента.
+     */
     useEffect(() => {
         const fetchLessonAndQuiz = async () => {
             try {
-                console.log("Отримую урок з ID:", lessonId);
                 const lessonData = await getLessonById(lessonId);
-                console.log("Отримані дані уроку:", lessonData);
                 setLesson(lessonData);
 
                 if (lessonData.quiz_file) {
                     try {
-                        // Завантаження та парсинг JSON файлу з квізом
                         const quizResponse = await fetch(normalizePath(lessonData.quiz_file));
-                        if (!quizResponse.ok) {
-                            throw new Error("Не вдалося завантажити файл квізу");
-                        }
+                        if (!quizResponse.ok) throw new Error("Не вдалося завантажити файл квізу");
                         const quizJson = await quizResponse.json();
-                        console.log("Отримані дані квізу:", quizJson);
 
-                        // Перевіряємо, чи є об'єкт quiz в JSON
-                        if (quizJson.quiz) {
-                            setQuizData(quizJson.quiz);
-                        } else {
-                            // Якщо немає об'єкта quiz, припускаємо, що кореневий об'єкт і є даними квізу
-                            setQuizData(quizJson);
-                        }
+                        // Підтримка як старого, так і нового формату JSON
+                        setQuizData(quizJson.quiz || quizJson);
                     } catch (quizErr) {
                         console.error("Помилка при завантаженні квізу:", quizErr);
                         setError("Не вдалося завантажити завдання квізу. Спробуйте пізніше.");
@@ -69,15 +70,14 @@ export default function QuizPage() {
         fetchLessonAndQuiz();
     }, [lessonId]);
 
+    /**
+     * Збереження прогресу у бекенді, якщо тест завершено і успішно пройдено (60%+).
+     */
     useEffect(() => {
         if (!completed || !lessonId || !quizData) return;
 
         const percentage = Math.round((score / quizData.questions.length) * 100);
-
-        if (percentage < 60) {
-            console.log("Тест не пройдено — прогрес не збережено");
-            return;
-        }
+        if (percentage < 60) return; // Якщо недостатньо балів, прогрес не зберігається
 
         const saveProgress = async () => {
             try {
@@ -94,10 +94,7 @@ export default function QuizPage() {
                     })
                 });
 
-                if (!response.ok) {
-                    throw new Error("Не вдалося оновити прогрес");
-                }
-
+                if (!response.ok) throw new Error("Не вдалося оновити прогрес");
                 console.log("✅ Прогрес успішно збережено");
             } catch (err) {
                 console.error("❌ Помилка при збереженні прогресу:", err);
@@ -107,26 +104,27 @@ export default function QuizPage() {
         saveProgress();
     }, [completed, lessonId, quizData, score]);
 
-    // Обробка вибору відповіді
+    /**
+     * Обробник вибору відповіді користувачем.
+     * @param {number} answerIndex - ID обраної відповіді
+     */
     const handleAnswerSelect = (answerIndex) => {
-        if (showFeedback) return; // Блокуємо вибір під час показу фідбеку
+        if (showFeedback) return;
         setSelectedAnswer(answerIndex);
     };
 
-    // Перевірка відповіді
+    /**
+     * Перевіряє відповідь користувача та оновлює стан квізу.
+     */
     const checkAnswer = () => {
         if (selectedAnswer === null) return;
-
         const currentQuestion = quizData.questions[currentQuestionIndex];
         const isCorrect = selectedAnswer === currentQuestion.correctAnswerId;
 
-        if (isCorrect) {
-            setScore(prevScore => prevScore + 1);
-        }
-
+        if (isCorrect) setScore(prevScore => prevScore + 1);
         setShowFeedback(true);
 
-        // Автоматичний перехід до наступного питання після затримки
+        // Автоматичний перехід через 2 сек
         setTimeout(() => {
             if (currentQuestionIndex < quizData.questions.length - 1) {
                 setCurrentQuestionIndex(prevIndex => prevIndex + 1);
@@ -138,7 +136,7 @@ export default function QuizPage() {
         }, 2000);
     };
 
-    // Перезапуск квізу
+    /** Скидає стан квізу для повторного проходження. */
     const restartQuiz = () => {
         setCurrentQuestionIndex(0);
         setSelectedAnswer(null);
@@ -147,7 +145,9 @@ export default function QuizPage() {
         setCompleted(false);
     };
 
-    // Рендер поточного питання
+    /**
+     * Рендер поточного питання, включаючи зображення, варіанти відповідей, фідбек.
+     */
     const renderCurrentQuestion = () => {
         if (!quizData || !quizData.questions || quizData.questions.length === 0) {
             return <p style={quizPageStyles.errorMessage}>Питання не знайдені</p>;
@@ -177,11 +177,8 @@ export default function QuizPage() {
                             style={{
                                 ...quizPageStyles.answerOption,
                                 ...(selectedAnswer === option.id ? quizPageStyles.selectedAnswer : {}),
-                                ...(showFeedback && option.id === correctAnswerId
-                                    ? quizPageStyles.correctAnswer
-                                    : {}),
-                                ...(showFeedback && selectedAnswer === option.id &&
-                                option.id !== correctAnswerId
+                                ...(showFeedback && option.id === correctAnswerId ? quizPageStyles.correctAnswer : {}),
+                                ...(showFeedback && selectedAnswer === option.id && option.id !== correctAnswerId
                                     ? quizPageStyles.wrongAnswer
                                     : {})
                             }}
@@ -235,7 +232,9 @@ export default function QuizPage() {
         );
     };
 
-    // Рендер результатів квізу
+    /**
+     * Рендер результатів після завершення тесту.
+     */
     const renderResults = () => {
         const percentage = Math.round((score / quizData.questions.length) * 100);
         let resultMessage = "";
@@ -254,7 +253,7 @@ export default function QuizPage() {
 
         return (
             <div style={quizPageStyles.resultsContainer}>
-                <h2 style={{...quizPageStyles.resultsTitle, color: resultColor}}>
+                <h2 style={{ ...quizPageStyles.resultsTitle, color: resultColor }}>
                     Результати тесту
                 </h2>
 
@@ -267,7 +266,7 @@ export default function QuizPage() {
                     </div>
                 </div>
 
-                <p style={{...quizPageStyles.resultsFeedback, color: resultColor}}>
+                <p style={{ ...quizPageStyles.resultsFeedback, color: resultColor }}>
                     {resultMessage}
                 </p>
 
@@ -282,26 +281,17 @@ export default function QuizPage() {
                 )}
 
                 <div style={quizPageStyles.resultsButtons}>
-                    <Button
-                        onClick={restartQuiz}
-                        text="Спробувати ще раз"
-                        color="#FFA726"
-                    />
-                    <Button
-                        onClick={() => navigate(`/lesson/${lessonId}`)}
-                        text="Повернутися до уроку"
-                        color="#66BB6A"
-                    />
-                    <Button
-                        onClick={() => navigate("/dashboard")}
-                        text="До абетки"
-                        color="#42A5F5"
-                    />
+                    <Button onClick={restartQuiz} text="Спробувати ще раз" color="#FFA726" />
+                    <Button onClick={() => navigate(`/lesson/${lessonId}`)} text="Повернутися до уроку" color="#66BB6A" />
+                    <Button onClick={() => navigate("/dashboard")} text="До абетки" color="#42A5F5" />
                 </div>
             </div>
         );
     };
 
+    /**
+     * Основний рендер компонента: показує завантаження, помилку або сам квіз.
+     */
     return (
         <div style={quizPageStyles.mainContainer}>
             <div style={quizPageStyles.contentWrapper}>
@@ -327,7 +317,7 @@ export default function QuizPage() {
                     </div>
                 ) : (
                     <>
-                        {/* Хедер з заголовком */}
+                        {/* Заголовок */}
                         <div style={quizPageStyles.header}>
                             <h1 style={quizPageStyles.headerTitle}>
                                 Тестування: літера {lesson?.letter_upper || "..."}

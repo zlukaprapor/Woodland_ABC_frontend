@@ -1,5 +1,16 @@
 import React from 'react';
 
+/**
+ * Кнопка відкриття модального вікна з Совеням.
+ * Відображається тільки якщо модальне вікно ще не показане.
+ *
+ * @component
+ * @param {Object} props - Вхідні параметри компонента.
+ * @param {boolean} props.showModal - Чи показане зараз модальне вікно.
+ * @param {Function} props.setShowModal - Функція для встановлення стану модального вікна (true/false).
+ *
+ * @returns {JSX.Element|null} Кнопка із зображенням сови, або `null`, якщо модальне вікно вже активне.
+ */
 const OwlModalButton = ({ showModal, setShowModal }) => {
     if (showModal) return null; // якщо модалка вже показана — не показувати кнопку
 

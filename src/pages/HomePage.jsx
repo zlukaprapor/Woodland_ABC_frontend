@@ -1,3 +1,12 @@
+/**
+ * Компонент домашньої сторінки застосунку "Лісова абетка".
+ *
+ * Відображає привітання та дві кнопки для переходу до сторінки реєстрації або логіну.
+ *
+ * @component
+ * @returns {JSX.Element} Інтерфейс домашньої сторінки
+ */
+
 import React from "react";
 import {useNavigate} from "react-router-dom";
 import Button from "../components/ui/Button.jsx";
@@ -11,8 +20,8 @@ export default function HomePage() {
             <div style={homePageStyles.welcomeCard}>
                 <h1 style={homePageStyles.welcomeTitle}>👋 Вітаємо у "Лісовій абетці"!</h1>
                 <p style={homePageStyles.welcomeSubtitle}>Навчайся граючись 🌲🦊</p>
-                <Button onClick={() => navigate("/register")} text="Реєстрація"/>
-                <Button onClick={() => navigate("/login")} text="Увійти" color="#66bb6a"/>
+                <Button onClick={() => navigate("/register")} text="Реєстрація" />
+                <Button onClick={() => navigate("/login")} text="Увійти" color="#66bb6a" />
             </div>
         </div>
     );
