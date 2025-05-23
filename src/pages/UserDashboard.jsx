@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getLessons } from "../api/lessons";
 import { getProgress } from "../api/progress";
@@ -9,13 +9,6 @@ import { userDashboardStyles } from "../styles/pagesStyles.js";
 /**
  * Компонент панелі користувача для відображення уроків з літер,
  * прогресу користувача та можливості переходу до уроків.
- *
- * Завантажує список уроків та прогрес користувача, відображає літери у
- * спеціальному порядку, блокує ті, які недоступні для вивчення,
- * дозволяє вийти з системи.
- *
- * @component
- * @returns {JSX.Element} Інтерфейс панелі користувача
  */
 export default function UserDashboard() {
     const [letters, setLetters] = useState([]);
@@ -23,8 +16,8 @@ export default function UserDashboard() {
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
+    const scrollRef = useRef(null);
 
-    // Власний порядок літер для відображення
     const customLetterOrder = [
         'А', 'У', 'О', 'М', 'Н', 'И', 'І', 'С', 'Л', 'К', 'В',
         'Е', 'Р', 'П', 'Т', 'Ш', 'Д', 'З', 'Б', 'Г', 'Ґ', 'Ч',
@@ -40,10 +33,8 @@ export default function UserDashboard() {
                 const lessons = await getLessons();
                 const progress = await getProgress();
 
-                // Ідентифікатори завершених уроків
                 const completedLessonIds = new Set(progress.map(p => p.lesson_id));
 
-                // Оновлюємо уроки з інформацією про завершення та блокування
                 const updatedLessons = lessons.map((lesson, index) => {
                     const isCompleted = completedLessonIds.has(lesson.id);
 
@@ -64,7 +55,6 @@ export default function UserDashboard() {
                     };
                 });
 
-                // Сортуємо уроки відповідно до власного порядку літер
                 const sortedLessons = customLetterOrder
                     .map(letter => updatedLessons.find(l => l.letter_upper === letter))
                     .filter(Boolean);
@@ -81,23 +71,13 @@ export default function UserDashboard() {
         fetchData();
     }, []);
 
-    /**
-     * Обробник кліку по літері.
-     * Якщо літера не заблокована, переходить до відповідного уроку.
-     *
-     * @param {object} letter Об'єкт літери
-     */
     const handleLetterClick = (letter) => {
         if (letter.isBlocked) return;
         navigate(`/lesson/${letter.id}`);
     };
 
-    /**
-     * Повертає випадковий колір з набору кольорів для стилізації літер.
-     *
-     * @returns {string} HEX-код кольору
-     */
-    const getRandomColor = () => {
+    // Фіксуємо кольори, щоб не змінювались при кожному рендері
+    const letterColors = useMemo(() => {
         const colors = [
             "#FFD54F", "#AED581", "#81C784", "#4FC3F7",
             "#7986CB", "#FF8A65", "#BA68C8", "#4DD0E1",
@@ -105,16 +85,24 @@ export default function UserDashboard() {
             "#64B5F6", "#DCE775", "#BA68C8", "#FFB300",
             "#009688", "#E57373",
         ];
-        return colors[Math.floor(Math.random() * colors.length)];
-    };
+        return letters.map(() => colors[Math.floor(Math.random() * colors.length)]);
+    }, [letters]);
 
-    /**
-     * Обробник виходу з системи.
-     * Викликає сервіс logout і перенаправляє на сторінку логіну.
-     */
     const handleLogout = () => {
         logout();
         navigate("/login");
+    };
+
+    const scrollLeft = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({ left: -200, behavior: "smooth" });
+        }
+    };
+
+    const scrollRight = () => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollBy({ left: 200, behavior: "smooth" });
+        }
     };
 
     return (
@@ -147,57 +135,114 @@ export default function UserDashboard() {
                             Обери літеру для вивчення:
                         </p>
 
-                        <div style={userDashboardStyles.lettersGrid}>
-                            {letters.length > 0 ? (
-                                letters.map((letter) => {
-                                    const bgColor = getRandomColor();
-                                    const isBlocked = letter.isBlocked;
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <button
+                                onClick={scrollLeft}
+                                style={{
+                                    fontSize: 24,
+                                    cursor: "pointer",
+                                    background: "none",
+                                    border: "none",
+                                    userSelect: "none",
+                                }}
+                                aria-label="Прокрутити вліво"
+                            >
+                                ◀
+                            </button>
 
-                                    return (
-                                        <div
-                                            key={letter.id}
-                                            style={{
-                                                ...userDashboardStyles.letterCard,
-                                                backgroundColor: isBlocked
-                                                    ? "#ccc" // Сірий фон для заблокованих
-                                                    : bgColor,
-                                                cursor: isBlocked ? "not-allowed" : "pointer",
-                                                opacity: isBlocked ? 0.5 : 1,
-                                            }}
-                                            onClick={() => handleLetterClick(letter)}
-                                            onMouseEnter={(e) => {
-                                                if (!isBlocked) {
-                                                    e.currentTarget.style.transform = "translateY(-5px) scale(1.05)";
-                                                    e.currentTarget.style.boxShadow = "0 8px 16px rgba(0,0,0,0.3)";
-                                                }
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.transform = "translateY(0) scale(1)";
-                                                e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.2)";
-                                            }}
-                                        >
-                                            {letter.letter_upper}
-                                            <div style={userDashboardStyles.letterLowercase}>
-                                                {letter.letter_lower}
-                                            </div>
-                                            {isBlocked && (
-                                                <div style={userDashboardStyles.lockOverlay}>
-                                                    🔒
+                            <div
+                                ref={scrollRef}
+                                style={{
+                                    ...userDashboardStyles.lettersGrid,
+                                    overflowX: "auto",
+                                    display: "flex",
+                                    gap: 12,
+                                    paddingBottom: 10,
+                                    scrollBehavior: "smooth",
+                                    // Приховуємо скроллбар у WebKit (Safari, Chrome)
+                                    WebkitOverflowScrolling: "touch",
+                                }}
+                            >
+                                {letters.length > 0 ? (
+                                    letters.map((letter, i) => {
+                                        const bgColor = letter.isBlocked ? "#ccc" : letterColors[i];
+                                        const isBlocked = letter.isBlocked;
+
+                                        return (
+                                            <div
+                                                key={letter.id}
+                                                style={{
+                                                    ...userDashboardStyles.letterCard,
+                                                    backgroundColor: bgColor,
+                                                    cursor: isBlocked ? "not-allowed" : "pointer",
+                                                    opacity: isBlocked ? 0.5 : 1,
+                                                    flex: "0 0 auto",
+                                                    transition: "transform 0.3s, box-shadow 0.3s",
+                                                    borderRadius: 12,
+                                                    userSelect: "none",
+                                                    padding: "20px 24px",
+                                                    fontSize: 36,
+                                                    fontWeight: "bold",
+                                                    color: "#333",
+                                                    textAlign: "center",
+                                                    position: "relative",
+                                                }}
+                                                onClick={() => handleLetterClick(letter)}
+                                                onMouseEnter={(e) => {
+                                                    if (!isBlocked) {
+                                                        e.currentTarget.style.transform = "translateY(-8px) scale(1.1)";
+                                                        e.currentTarget.style.boxShadow = "0 12px 24px rgba(0,0,0,0.25)";
+                                                    }
+                                                }}
+                                                onMouseLeave={(e) => {
+                                                    e.currentTarget.style.transform = "translateY(0) scale(1)";
+                                                    e.currentTarget.style.boxShadow = "0 4px 8px rgba(0,0,0,0.15)";
+                                                }}
+                                            >
+                                                {letter.letter_upper}
+                                                <div style={{ fontSize: 18, marginTop: 4, opacity: 0.8 }}>
+                                                    {letter.letter_lower}
                                                 </div>
-                                            )}
-                                        </div>
-                                    );
-                                })
-                            ) : (
-                                <div style={userDashboardStyles.emptyStateContainer}>
-                                    <p style={userDashboardStyles.emptyStateMessage}>
-                                        Літери ще не додані. Повертайтеся пізніше!
-                                    </p>
-                                    <p style={userDashboardStyles.emptyStateHint}>
-                                        Адміністратор може додати уроки в панелі адміністратора.
-                                    </p>
-                                </div>
-                            )}
+                                                {isBlocked && (
+                                                    <div
+                                                        style={{
+                                                            position: "absolute",
+                                                            top: 8,
+                                                            right: 8,
+                                                            fontSize: 18,
+                                                        }}
+                                                    >
+                                                        🔒
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })
+                                ) : (
+                                    <div style={userDashboardStyles.emptyStateContainer}>
+                                        <p style={userDashboardStyles.emptyStateMessage}>
+                                            Літери ще не додані. Повертайтеся пізніше!
+                                        </p>
+                                        <p style={userDashboardStyles.emptyStateHint}>
+                                            Адміністратор може додати уроки в панелі адміністратора.
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <button
+                                onClick={scrollRight}
+                                style={{
+                                    fontSize: 24,
+                                    cursor: "pointer",
+                                    background: "none",
+                                    border: "none",
+                                    userSelect: "none",
+                                }}
+                                aria-label="Прокрутити вправо"
+                            >
+                                ▶
+                            </button>
                         </div>
                     </>
                 )}
