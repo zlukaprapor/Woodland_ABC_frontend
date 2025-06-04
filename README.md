@@ -91,6 +91,12 @@ npm run build
 Файли згенеруються у `/dist/`, готові до деплою.
 
 ---
+## 📦 Збірка для DOCKER
+# Збірка образу
+docker build -t woodland-frontend .
+
+# Запуск контейнера
+docker run -d -p 3000:80 --name woodland-frontend-container woodland-frontend
 
 ## 📄 Ліцензія
 

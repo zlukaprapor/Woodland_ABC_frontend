@@ -1,0 +1,19 @@
+
+services:
+  backend:
+    image: woodland_abc_backend-backend:latest
+    container_name: backend
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./Woodland_ABC_frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_BASE_URL=http://backend:8000/api/v1
+    depends_on:
+      - backend
